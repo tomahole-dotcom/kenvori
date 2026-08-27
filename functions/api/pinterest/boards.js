@@ -18,19 +18,21 @@ function tokenFrom(context) {
   return getCookie(context.request, 'kenvori_pinterest_token');
 }
 
+const API_BASE = 'https://api-sandbox.pinterest.com/v5';
+
 async function fetchAllBoards(token) {
   const items = [];
   let bookmark = '';
   let pages = 0;
   do {
-    const url = new URL('https://api.pinterest.com/v5/boards');
+    const url = new URL(`${API_BASE}/boards`);
     url.searchParams.set('page_size', '100');
     if (bookmark) url.searchParams.set('bookmark', bookmark);
     const response = await fetch(url.toString(), {
       headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' }
     });
     const data = await response.json().catch(() => ({}));
-    if (!response.ok) throw Object.assign(new Error(data.message || data.error || 'Could not load Pinterest boards'), { status: response.status });
+    if (!response.ok) throw Object.assign(new Error(data.message || data.error || 'Could not load Pinterest Sandbox boards'), { status: response.status });
     if (Array.isArray(data.items)) items.push(...data.items);
     bookmark = typeof data.bookmark === 'string' ? data.bookmark : '';
     pages += 1;
@@ -45,7 +47,7 @@ export async function onRequestGet(context) {
     const items = await fetchAllBoards(token);
     return json({ items: items.map(b => ({ id: b.id, name: b.name })) });
   } catch (error) {
-    return json({ error: error.message || 'Could not load Pinterest boards' }, error.status || 502);
+    return json({ error: error.message || 'Could not load Pinterest Sandbox boards' }, error.status || 502);
   }
 }
 
@@ -60,12 +62,12 @@ export async function onRequestPost(context) {
   if (name.length < 3 || name.length > 180) return json({ error: 'Board name must be between 3 and 180 characters' }, 400);
   if (description.length > 500) return json({ error: 'Board description is too long' }, 400);
 
-  const response = await fetch('https://api.pinterest.com/v5/boards', {
+  const response = await fetch(`${API_BASE}/boards`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}`, Accept: 'application/json', 'Content-Type': 'application/json' },
     body: JSON.stringify({ name, description, privacy: 'PUBLIC' })
   });
   const data = await response.json().catch(() => ({}));
-  if (!response.ok) return json({ error: data.message || data.error || 'Could not create Pinterest board' }, response.status);
-  return json({ id: data.id, name: data.name || name, description: data.description || description }, 201);
+  if (!response.ok) return json({ error: data.message || data.error || 'Could not create Pinterest Sandbox board' }, response.status);
+  return json({ id: data.id, name: data.name || name, description: data.description || description, environment: 'sandbox' }, 201);
 }
