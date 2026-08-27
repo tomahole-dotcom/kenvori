@@ -49,11 +49,10 @@ export async function onRequestGet(context) {
   }
 
   const maxAge = Math.max(60, Math.min(Number(tokenData.expires_in) || 2592000, 2592000));
-  const headers = new Headers({
-    Location: '/pinterest-publisher.html?connected=1',
-    'Cache-Control': 'no-store'
-  });
-  headers.append('Set-Cookie', `kenvori_pinterest_token=${encodeURIComponent(tokenData.access_token)}; Path=/api/pinterest; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAge}`);
+  const headers = new Headers();
+  headers.set('Location', '/pinterest-publisher.html?connected=1');
+  headers.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+  headers.append('Set-Cookie', `kenvori_pinterest_token=${encodeURIComponent(tokenData.access_token)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAge}`);
   headers.append('Set-Cookie', 'kenvori_pinterest_state=; Path=/api/pinterest; HttpOnly; Secure; SameSite=Lax; Max-Age=0');
 
   return new Response(null, { status: 302, headers });
