@@ -12,40 +12,27 @@
 <body>
   <div class="wrap">
     <div class="top"><div class="brand">Kenvori</div><a class="home" href="/">Back to Kenvori</a></div>
-
     <section class="card">
       <div class="small">Internal integration demo</div>
       <h1>Kenvori Content Publisher</h1>
       <p>Connect Kenvori's Pinterest account, load its boards, and publish an original image Pin through the Pinterest API.</p>
-      <div class="actions">
-        <a class="btn" id="connectBtn" href="/api/pinterest/connect">Connect Pinterest</a>
-        <button class="btn secondary" id="disconnectBtn" type="button">Disconnect</button>
-        <span class="status" id="connectionStatus">Not connected</span>
-      </div>
+      <div class="actions"><a class="btn" id="connectBtn" href="/api/pinterest/connect">Connect Pinterest</a><button class="btn secondary" id="disconnectBtn" type="button">Disconnect</button><span class="status" id="connectionStatus">Not connected</span></div>
     </section>
-
     <section class="card">
       <h2><span class="step">1</span>Select board</h2>
-      <div class="field">
-        <label for="board">Pinterest board</label>
-        <select id="board" disabled><option value="">Connect Pinterest to load boards</option></select>
-      </div>
-      <div class="actions">
-        <button class="btn secondary" id="setupBoardBtn" type="button" disabled>Create PressureWash board</button>
-        <span class="status" id="boardSetupStatus"></span>
-      </div>
+      <div class="field"><label for="board">Pinterest board</label><select id="board" disabled><option value="">Connect Pinterest to load boards</option></select></div>
+      <div class="actions"><button class="btn secondary" id="setupBoardBtn" type="button" disabled>Create PressureWash board</button><span class="status" id="boardSetupStatus"></span></div>
       <div class="small" id="boardHelp" style="margin-top:12px">Boards are loaded from the authenticated Pinterest account.</div>
     </section>
-
     <section class="card">
       <h2><span class="step">2</span>Create Pin</h2>
       <form id="pinForm">
         <div class="row">
-          <div class="field"><label for="title">Pin title</label><input id="title" maxlength="100" required placeholder="Pressure Washing Quote Calculator"></div>
-          <div class="field"><label for="link">Destination URL</label><input id="link" type="url" required placeholder="https://..."></div>
+          <div class="field"><label for="title">Pin title</label><input id="title" maxlength="100" required value="Pressure Washing Pros: Know Your True Profit"></div>
+          <div class="field"><label for="link">Destination URL</label><input id="link" type="url" required value="https://kenvori.no/pressurewash-lite.html"></div>
         </div>
-        <div class="field"><label for="description">Description</label><textarea id="description" maxlength="800" required placeholder="Describe the original Kenvori content and where the Pin leads."></textarea></div>
-        <div class="field"><label for="imageUrl">Image URL</label><input id="imageUrl" type="url" required placeholder="https://.../pin-image.jpg"><div class="small">Use a public HTTPS URL for the real Pin image. The preview below uses exactly that image.</div><img id="preview" class="preview" alt="Pin image preview"></div>
+        <div class="field"><label for="description">Description</label><textarea id="description" maxlength="800" required>Stop guessing what each pressure washing job actually earns. PressureWash Lite helps you build quotes, track jobs and customers, calculate costs, and see revenue, cost and profit in one business spreadsheet.</textarea></div>
+        <div class="field"><label for="imageUrl">Image URL</label><input id="imageUrl" type="url" required value="https://kenvori.no/assets/pressurewash-lite-pin-demo.png"><div class="small">This test uses a Kenvori-hosted PressureWash graphic with no fake product UI.</div><img id="preview" class="preview" alt="Pin image preview"></div>
         <div class="actions"><button class="btn" id="publishBtn" type="submit" disabled>Publish Pin</button><span class="status" id="publishStatus"></span></div>
         <div class="result" id="result"></div>
       </form>
@@ -53,74 +40,15 @@
   </div>
 <script>
 const $=id=>document.getElementById(id);
-const board=$('board'), publishBtn=$('publishBtn'), connectionStatus=$('connectionStatus'), result=$('result'), publishStatus=$('publishStatus'), setupBoardBtn=$('setupBoardBtn'), boardSetupStatus=$('boardSetupStatus');
-
-function setConnected(connected){
-  connectionStatus.textContent=connected?'Pinterest connected':'Not connected';
-  connectionStatus.className='status '+(connected?'ok':'');
-  $('connectBtn').style.display=connected?'none':'inline-flex';
-  $('disconnectBtn').style.display=connected?'inline-flex':'none';
-  board.disabled=!connected;
-  setupBoardBtn.disabled=!connected;
-  publishBtn.disabled=!connected||!board.value;
-}
-
-async function loadBoards(selectId=''){
-  board.innerHTML='<option value="">Loading boards…</option>';
-  try{
-    const r=await fetch('/api/pinterest/boards',{headers:{Accept:'application/json'}});
-    if(r.status===401){board.innerHTML='<option value="">Connect Pinterest to load boards</option>';setConnected(false);return;}
-    const data=await r.json();
-    if(!r.ok) throw new Error(data.error||'Could not load boards');
-    const items=Array.isArray(data.items)?data.items:[];
-    board.innerHTML='<option value="">Choose a board</option>'+items.map(b=>`<option value="${String(b.id).replace(/"/g,'&quot;')}">${String(b.name||b.id).replace(/</g,'&lt;')}</option>`).join('');
-    if(selectId && items.some(b=>String(b.id)===String(selectId))) board.value=String(selectId);
-    $('boardHelp').textContent=items.length?`${items.length} board${items.length===1?'':'s'} loaded from Pinterest.`:'No boards returned by Pinterest.';
-    setConnected(true);
-    publishBtn.disabled=!board.value;
-  }catch(e){board.innerHTML='<option value="">Could not load boards</option>';connectionStatus.textContent=e.message;connectionStatus.className='status bad';}
-}
-
-setupBoardBtn.addEventListener('click',async()=>{
-  setupBoardBtn.disabled=true;
-  boardSetupStatus.textContent='Creating PressureWash board…';
-  boardSetupStatus.className='status';
-  try{
-    const r=await fetch('/api/pinterest/setup-pressurewash-board',{method:'POST',headers:{Accept:'application/json'}});
-    const data=await r.json().catch(()=>({}));
-    if(!r.ok) throw new Error(data.error||'Could not create PressureWash board');
-    boardSetupStatus.textContent=data.created===false?'PressureWash board already exists':'PressureWash board created';
-    boardSetupStatus.className='status ok';
-    await loadBoards(data.id||'');
-  }catch(e){
-    boardSetupStatus.textContent=e.message;
-    boardSetupStatus.className='status bad';
-  } finally {
-    setupBoardBtn.disabled=false;
-  }
-});
-
+const board=$('board'),publishBtn=$('publishBtn'),connectionStatus=$('connectionStatus'),result=$('result'),publishStatus=$('publishStatus'),setupBoardBtn=$('setupBoardBtn'),boardSetupStatus=$('boardSetupStatus');
+function setConnected(connected){connectionStatus.textContent=connected?'Pinterest connected':'Not connected';connectionStatus.className='status '+(connected?'ok':'');$('connectBtn').style.display=connected?'none':'inline-flex';$('disconnectBtn').style.display=connected?'inline-flex':'none';board.disabled=!connected;setupBoardBtn.disabled=!connected;publishBtn.disabled=!connected||!board.value;}
+async function loadBoards(selectId=''){board.innerHTML='<option value="">Loading boards…</option>';try{const r=await fetch('/api/pinterest/boards',{headers:{Accept:'application/json'}});if(r.status===401){board.innerHTML='<option value="">Connect Pinterest to load boards</option>';setConnected(false);return;}const data=await r.json();if(!r.ok)throw new Error(data.error||'Could not load boards');const items=Array.isArray(data.items)?data.items:[];board.innerHTML='<option value="">Choose a board</option>'+items.map(b=>`<option value="${String(b.id).replace(/"/g,'&quot;')}">${String(b.name||b.id).replace(/</g,'&lt;')}</option>`).join('');const preferred=selectId||((items.find(b=>String(b.name||'').toLowerCase()==='pressurewash pro')||{}).id||'');if(preferred&&items.some(b=>String(b.id)===String(preferred)))board.value=String(preferred);$('boardHelp').textContent=items.length?`${items.length} board${items.length===1?'':'s'} loaded from Pinterest.`:'No boards returned by Pinterest.';setConnected(true);publishBtn.disabled=!board.value;}catch(e){board.innerHTML='<option value="">Could not load boards</option>';connectionStatus.textContent=e.message;connectionStatus.className='status bad';}}
+setupBoardBtn.addEventListener('click',async()=>{setupBoardBtn.disabled=true;boardSetupStatus.textContent='Creating PressureWash board…';boardSetupStatus.className='status';try{const r=await fetch('/api/pinterest/setup-pressurewash-board',{headers:{Accept:'application/json'}});if(r.redirected){location.href=r.url;return;}const data=await r.json().catch(()=>({}));if(!r.ok)throw new Error(data.error||'Could not create PressureWash board');await loadBoards(data.id||'');boardSetupStatus.textContent='PressureWash board ready';boardSetupStatus.className='status ok';}catch(e){boardSetupStatus.textContent=e.message;boardSetupStatus.className='status bad';}finally{setupBoardBtn.disabled=false;}});
 board.addEventListener('change',()=>{publishBtn.disabled=!board.value;});
-$('imageUrl').addEventListener('input',e=>{const u=e.target.value.trim();const p=$('preview');if(/^https:\/\//i.test(u)){p.src=u;p.style.display='block'}else{p.removeAttribute('src');p.style.display='none'}});
+const p=$('preview');p.src=$('imageUrl').value;p.style.display='block';$('imageUrl').addEventListener('input',e=>{const u=e.target.value.trim();if(/^https:\/\//i.test(u)){p.src=u;p.style.display='block'}else{p.removeAttribute('src');p.style.display='none'}});
 $('disconnectBtn').addEventListener('click',async()=>{await fetch('/api/pinterest/disconnect',{method:'POST'});board.innerHTML='<option value="">Connect Pinterest to load boards</option>';boardSetupStatus.textContent='';setConnected(false);});
-
-$('pinForm').addEventListener('submit',async e=>{
-  e.preventDefault();result.style.display='none';publishStatus.textContent='Running QA and publishing…';publishStatus.className='status';publishBtn.disabled=true;
-  const payload={board_id:board.value,title:$('title').value.trim(),description:$('description').value.trim(),link:$('link').value.trim(),image_url:$('imageUrl').value.trim()};
-  try{
-    const r=await fetch('/api/pinterest/pins',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});
-    const data=await r.json();
-    if(!r.ok) throw new Error(data.error||'Pinterest publish failed');
-    publishStatus.textContent='Pin published successfully';publishStatus.className='status ok';
-    result.textContent=`Pinterest Pin ID: ${data.id||'created'}\nStatus: Created through Pinterest API`;
-    result.style.display='block';
-  }catch(err){publishStatus.textContent=err.message;publishStatus.className='status bad';result.textContent=err.message;result.style.display='block';}
-  finally{publishBtn.disabled=!board.value;}
-});
-
-const params=new URLSearchParams(location.search);
-if(params.get('error')){connectionStatus.textContent='Pinterest connection failed: '+params.get('error');connectionStatus.className='status bad';}
-loadBoards();
+$('pinForm').addEventListener('submit',async e=>{e.preventDefault();result.style.display='none';publishStatus.textContent='Running QA and publishing…';publishStatus.className='status';publishBtn.disabled=true;const payload={board_id:board.value,title:$('title').value.trim(),description:$('description').value.trim(),link:$('link').value.trim(),image_url:$('imageUrl').value.trim()};try{const r=await fetch('/api/pinterest/pins',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});const data=await r.json();if(!r.ok)throw new Error(data.error||'Pinterest publish failed');publishStatus.textContent='Pin published successfully';publishStatus.className='status ok';result.textContent=`Pinterest Pin ID: ${data.id||'created'}\nStatus: Created through Pinterest API`;result.style.display='block';}catch(err){publishStatus.textContent=err.message;publishStatus.className='status bad';result.textContent=err.message;result.style.display='block';}finally{publishBtn.disabled=!board.value;}});
+const params=new URLSearchParams(location.search);if(params.get('error')){connectionStatus.textContent='Pinterest connection failed: '+params.get('error');connectionStatus.className='status bad';}loadBoards();
 </script>
 </body>
 </html>
