@@ -7,26 +7,33 @@ function getCookie(request, name) {
   return null;
 }
 
-function redirect(status, message) {
-  const url = new URL('/pinterest-publisher.html', 'https://kenvori.no');
-  url.searchParams.set('board_setup', status);
-  if (message) url.searchParams.set('board_message', message);
-  return Response.redirect(url.toString(), 302);
+function json(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Cache-Control': 'no-store'
+    }
+  });
 }
 
-export async function onRequestGet(context) {
+export async function onRequestPost(context) {
   const token = getCookie(context.request, 'kenvori_pinterest_token');
-  if (!token) return redirect('error', 'Pinterest is not connected');
+  if (!token) return json({ error: 'Pinterest is not connected' }, 401);
 
   const listResponse = await fetch('https://api.pinterest.com/v5/boards?page_size=100', {
     headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' }
   });
   const listData = await listResponse.json().catch(() => ({}));
-  if (!listResponse.ok) return redirect('error', listData.message || 'Could not load boards');
+  if (!listResponse.ok) {
+    return json({ error: listData.message || listData.error || 'Could not load boards' }, listResponse.status);
+  }
 
   const boards = Array.isArray(listData.items) ? listData.items : [];
   const existing = boards.find(b => String(b.name || '').trim().toLowerCase() === 'pressurewash pro');
-  if (existing) return redirect('existing', 'PressureWash Pro board is ready');
+  if (existing) {
+    return json({ created: false, id: existing.id, name: existing.name });
+  }
 
   const createResponse = await fetch('https://api.pinterest.com/v5/boards', {
     method: 'POST',
@@ -43,7 +50,10 @@ export async function onRequestGet(context) {
   });
 
   const createData = await createResponse.json().catch(() => ({}));
-  if (!createResponse.ok) return redirect('error', createData.message || createData.error || 'Could not create board');
+  if (!createResponse.ok) {
+    const message = createData.message || createData.error || createData.code || `Pinterest returned HTTP ${createResponse.status}`;
+    return json({ error: String(message), pinterest_status: createResponse.status }, createResponse.status);
+  }
 
-  return redirect('created', 'PressureWash Pro board created through the Pinterest API');
+  return json({ created: true, id: createData.id, name: createData.name || 'PressureWash Pro' }, 201);
 }
