@@ -34,7 +34,10 @@ export async function onRequestGet(context) {
     continuous_refresh: 'true'
   });
 
-  const tokenResponse = await fetch('https://api.pinterest.com/v5/oauth/token', {
+  // Trial Access Pin creation runs in Pinterest Sandbox, so the OAuth code
+  // must also be exchanged for a Sandbox token. Production and Sandbox
+  // tokens are not interchangeable.
+  const tokenResponse = await fetch('https://api-sandbox.pinterest.com/v5/oauth/token', {
     method: 'POST',
     headers: {
       Authorization: `Basic ${basic}`,
@@ -45,7 +48,7 @@ export async function onRequestGet(context) {
 
   const tokenData = await tokenResponse.json().catch(() => ({}));
   if (!tokenResponse.ok || !tokenData.access_token) {
-    return redirectWithError(tokenData.message || tokenData.error || 'Token exchange failed');
+    return redirectWithError(tokenData.message || tokenData.error || 'Sandbox token exchange failed');
   }
 
   const maxAge = Math.max(60, Math.min(Number(tokenData.expires_in) || 2592000, 2592000));
