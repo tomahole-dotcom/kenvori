@@ -13,7 +13,7 @@ export async function onRequestGet() {
     client_id: APP_ID,
     redirect_uri: REDIRECT_URI,
     response_type: 'code',
-    scope: 'boards:read,pins:write',
+    scope: 'boards:read,boards:write,pins:write',
     state
   });
 
