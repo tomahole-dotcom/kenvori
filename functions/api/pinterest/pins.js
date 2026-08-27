@@ -51,7 +51,9 @@ export async function onRequestPost(context) {
     }
   };
 
-  const response = await fetch('https://api.pinterest.com/v5/pins', {
+  // Trial Access apps must create Pins against Pinterest's API Sandbox.
+  // After Standard Access approval this host can be switched to api.pinterest.com.
+  const response = await fetch('https://api-sandbox.pinterest.com/v5/pins', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -64,5 +66,5 @@ export async function onRequestPost(context) {
   const data = await response.json().catch(() => ({}));
   if (!response.ok) return json({ error: data.message || data.error || 'Pinterest rejected the Pin' }, response.status);
 
-  return json({ id: data.id || null, link: data.link || null, board_id: data.board_id || boardId }, 201);
+  return json({ id: data.id || null, link: data.link || null, board_id: data.board_id || boardId, environment: 'sandbox' }, 201);
 }
