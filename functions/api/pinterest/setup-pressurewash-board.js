@@ -17,11 +17,13 @@ function json(data, status = 200) {
   });
 }
 
+const API_BASE = 'https://api-sandbox.pinterest.com/v5';
+
 export async function onRequestPost(context) {
   const token = getCookie(context.request, 'kenvori_pinterest_token');
   if (!token) return json({ error: 'Pinterest is not connected' }, 401);
 
-  const listResponse = await fetch('https://api.pinterest.com/v5/boards?page_size=100', {
+  const listResponse = await fetch(`${API_BASE}/boards?page_size=100`, {
     headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' }
   });
   const listData = await listResponse.json().catch(() => ({}));
@@ -35,7 +37,7 @@ export async function onRequestPost(context) {
     return json({ created: false, id: existing.id, name: existing.name });
   }
 
-  const createResponse = await fetch('https://api.pinterest.com/v5/boards', {
+  const createResponse = await fetch(`${API_BASE}/boards`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
