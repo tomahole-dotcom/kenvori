@@ -18,6 +18,16 @@ function tokenFrom(context) {
   return getCookie(context.request, 'kenvori_pinterest_token');
 }
 
+function rememberedBoard(request) {
+  const raw = getCookie(request, 'kenvori_pinterest_board');
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw);
+    if (/^\d+$/.test(String(parsed.id || '')) && parsed.name) return { id: String(parsed.id), name: String(parsed.name) };
+  } catch {}
+  return null;
+}
+
 const API_BASE = 'https://api-sandbox.pinterest.com/v5';
 
 async function fetchAllBoards(token) {
@@ -45,6 +55,8 @@ export async function onRequestGet(context) {
   if (!token) return json({ error: 'Pinterest is not connected' }, 401);
   try {
     const items = await fetchAllBoards(token);
+    const remembered = rememberedBoard(context.request);
+    if (remembered && !items.some(b => String(b.id) === remembered.id)) items.unshift(remembered);
     return json({ items: items.map(b => ({ id: b.id, name: b.name })) });
   } catch (error) {
     return json({ error: error.message || 'Could not load Pinterest Sandbox boards' }, error.status || 502);
