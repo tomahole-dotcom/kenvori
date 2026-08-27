@@ -30,7 +30,11 @@
         <label for="board">Pinterest board</label>
         <select id="board" disabled><option value="">Connect Pinterest to load boards</option></select>
       </div>
-      <div class="small" id="boardHelp">Boards are loaded from the authenticated Pinterest account.</div>
+      <div class="actions">
+        <button class="btn secondary" id="setupBoardBtn" type="button" disabled>Create PressureWash board</button>
+        <span class="status" id="boardSetupStatus"></span>
+      </div>
+      <div class="small" id="boardHelp" style="margin-top:12px">Boards are loaded from the authenticated Pinterest account.</div>
     </section>
 
     <section class="card">
@@ -49,7 +53,7 @@
   </div>
 <script>
 const $=id=>document.getElementById(id);
-const board=$('board'), publishBtn=$('publishBtn'), connectionStatus=$('connectionStatus'), result=$('result'), publishStatus=$('publishStatus');
+const board=$('board'), publishBtn=$('publishBtn'), connectionStatus=$('connectionStatus'), result=$('result'), publishStatus=$('publishStatus'), setupBoardBtn=$('setupBoardBtn'), boardSetupStatus=$('boardSetupStatus');
 
 function setConnected(connected){
   connectionStatus.textContent=connected?'Pinterest connected':'Not connected';
@@ -57,10 +61,11 @@ function setConnected(connected){
   $('connectBtn').style.display=connected?'none':'inline-flex';
   $('disconnectBtn').style.display=connected?'inline-flex':'none';
   board.disabled=!connected;
+  setupBoardBtn.disabled=!connected;
   publishBtn.disabled=!connected||!board.value;
 }
 
-async function loadBoards(){
+async function loadBoards(selectId=''){
   board.innerHTML='<option value="">Loading boards…</option>';
   try{
     const r=await fetch('/api/pinterest/boards',{headers:{Accept:'application/json'}});
@@ -69,14 +74,35 @@ async function loadBoards(){
     if(!r.ok) throw new Error(data.error||'Could not load boards');
     const items=Array.isArray(data.items)?data.items:[];
     board.innerHTML='<option value="">Choose a board</option>'+items.map(b=>`<option value="${String(b.id).replace(/"/g,'&quot;')}">${String(b.name||b.id).replace(/</g,'&lt;')}</option>`).join('');
+    if(selectId && items.some(b=>String(b.id)===String(selectId))) board.value=String(selectId);
     $('boardHelp').textContent=items.length?`${items.length} board${items.length===1?'':'s'} loaded from Pinterest.`:'No boards returned by Pinterest.';
     setConnected(true);
+    publishBtn.disabled=!board.value;
   }catch(e){board.innerHTML='<option value="">Could not load boards</option>';connectionStatus.textContent=e.message;connectionStatus.className='status bad';}
 }
 
+setupBoardBtn.addEventListener('click',async()=>{
+  setupBoardBtn.disabled=true;
+  boardSetupStatus.textContent='Creating PressureWash board…';
+  boardSetupStatus.className='status';
+  try{
+    const r=await fetch('/api/pinterest/setup-pressurewash-board',{method:'POST',headers:{Accept:'application/json'}});
+    const data=await r.json().catch(()=>({}));
+    if(!r.ok) throw new Error(data.error||'Could not create PressureWash board');
+    boardSetupStatus.textContent=data.created===false?'PressureWash board already exists':'PressureWash board created';
+    boardSetupStatus.className='status ok';
+    await loadBoards(data.id||'');
+  }catch(e){
+    boardSetupStatus.textContent=e.message;
+    boardSetupStatus.className='status bad';
+  } finally {
+    setupBoardBtn.disabled=false;
+  }
+});
+
 board.addEventListener('change',()=>{publishBtn.disabled=!board.value;});
 $('imageUrl').addEventListener('input',e=>{const u=e.target.value.trim();const p=$('preview');if(/^https:\/\//i.test(u)){p.src=u;p.style.display='block'}else{p.removeAttribute('src');p.style.display='none'}});
-$('disconnectBtn').addEventListener('click',async()=>{await fetch('/api/pinterest/disconnect',{method:'POST'});board.innerHTML='<option value="">Connect Pinterest to load boards</option>';setConnected(false);});
+$('disconnectBtn').addEventListener('click',async()=>{await fetch('/api/pinterest/disconnect',{method:'POST'});board.innerHTML='<option value="">Connect Pinterest to load boards</option>';boardSetupStatus.textContent='';setConnected(false);});
 
 $('pinForm').addEventListener('submit',async e=>{
   e.preventDefault();result.style.display='none';publishStatus.textContent='Running QA and publishing…';publishStatus.className='status';publishBtn.disabled=true;
