@@ -7,13 +7,18 @@ function getCookie(request, name) {
   return null;
 }
 
-function json(data, status = 200) {
+function json(data, status = 200, extraHeaders = {}) {
   return new Response(JSON.stringify(data), {
     status,
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Cache-Control': 'no-store'
-    }
+    headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', ...extraHeaders }
+  });
+}
+
+function remembered(data, created, status = 200) {
+  const id = String(data.id || '');
+  const name = String(data.name || 'PressureWash Pro');
+  return json({ created, id, name, environment: 'sandbox' }, status, {
+    'Set-Cookie': `kenvori_pinterest_board=${encodeURIComponent(JSON.stringify({id,name}))}; Path=/; Secure; SameSite=Lax; Max-Age=2592000`
   });
 }
 
@@ -22,16 +27,8 @@ const API_BASE = 'https://api-sandbox.pinterest.com/v5';
 async function createBoard(token, name) {
   const response = await fetch(`${API_BASE}/boards`, {
     method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      name,
-      description: 'Pressure washing business tips, quoting tools, pricing ideas and resources from Kenvori.',
-      privacy: 'PUBLIC'
-    })
+    headers: { Authorization: `Bearer ${token}`, Accept: 'application/json', 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, description: 'Pressure washing business tips, quoting tools, pricing ideas and resources from Kenvori.', privacy: 'PUBLIC' })
   });
   const data = await response.json().catch(() => ({}));
   return { response, data };
@@ -45,19 +42,14 @@ export async function onRequestPost(context) {
     headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' }
   });
   const listData = await listResponse.json().catch(() => ({}));
-  if (!listResponse.ok) {
-    return json({ error: listData.message || listData.error || 'Could not load boards' }, listResponse.status);
-  }
+  if (!listResponse.ok) return json({ error: listData.message || listData.error || 'Could not load boards' }, listResponse.status);
 
   const boards = Array.isArray(listData.items) ? listData.items : [];
   const existing = boards.find(b => String(b.name || '').trim().toLowerCase().startsWith('pressurewash pro'));
-  if (existing) return json({ created: false, id: existing.id, name: existing.name, environment: 'sandbox' });
+  if (existing) return remembered(existing, false);
 
   let name = 'PressureWash Pro';
   let attempt = await createBoard(token, name);
-
-  // Sandbox can report a duplicate even while List boards has not surfaced the entity yet.
-  // In that case create a one-off demo board and return its ID immediately.
   const message = String(attempt.data.message || attempt.data.error || '').toLowerCase();
   if (!attempt.response.ok && message.includes('already have a board with this name')) {
     const suffix = String(Date.now()).slice(-6);
@@ -70,5 +62,5 @@ export async function onRequestPost(context) {
     return json({ error: String(msg), pinterest_status: attempt.response.status }, attempt.response.status);
   }
 
-  return json({ created: true, id: attempt.data.id, name: attempt.data.name || name, environment: 'sandbox' }, 201);
+  return remembered({ id: attempt.data.id, name: attempt.data.name || name }, true, 201);
 }
