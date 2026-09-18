@@ -5,7 +5,7 @@ export default async()=>{try{
  const cur=await call(`/shops/${SHOP_ID}/shipping-profiles`),rows=cur.data?.results||[];
  const match=rows.find(x=>x.title===TITLE&&x.origin_country_iso==="US");
  if(match)return Response.json({ok:true,created:false,shopId:SHOP_ID,shippingProfileId:match.shipping_profile_id,title:match.title,origin:match.origin_country_iso,writes:false,publishAllowed:false});
- const body=new URLSearchParams({title:TITLE,origin_country_iso:"US",destination_country_iso:"US",primary_cost:"0.00",secondary_cost:"0.00"});
+ const body=new URLSearchParams({title:TITLE,origin_country_iso:"US",destination_country_iso:"US",origin_postal_code:"30071",primary_cost:"0.00",secondary_cost:"0.00",min_delivery_days:"2",max_delivery_days:"5"});
  const made=await call(`/shops/${SHOP_ID}/shipping-profiles`,{method:"POST",body});
  if(!made.r.ok)return Response.json({ok:false,status:made.r.status,error:made.data,writes:false,publishAllowed:false},{status:made.r.status});
  return Response.json({ok:true,created:true,shopId:SHOP_ID,shippingProfileId:made.data?.shipping_profile_id,title:made.data?.title,origin:made.data?.origin_country_iso,writes:true,publishAllowed:false,tokensExposed:false});
