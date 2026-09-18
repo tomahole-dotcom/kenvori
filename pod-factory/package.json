@@ -1,10 +1,8 @@
 {
-  "name": "kenvori-pod-factory",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "test": "node --test",
-    "catalog": "node src/catalog.js"
-  },
-  "engines": {"node": ">=20"}
+  "name":"kenvori-pod-factory",
+  "private":true,
+  "type":"module",
+  "scripts":{"test":"node --test","catalog":"node src/catalog.js"},
+  "dependencies":{"postgres":"^3.4.7"},
+  "engines":{"node":">=20"}
 }
