@@ -1,12 +1,16 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { assertWritablePrintifyShop } from "../src/shop-guard.js";
+import { FACTORY_PRINTIFY_SHOP_ID, assertWritablePrintifyShop } from "../src/shop-guard.js";
 
-test("permanently blocks legacy Norway Designs shop", () => {
-  assert.throws(() => assertWritablePrintifyShop(4788136, 9999999), /permanently blocked/);
+test("factory shop is locked to Kenvori", () => {
+  assert.equal(FACTORY_PRINTIFY_SHOP_ID, 28992579);
+  assert.equal(assertWritablePrintifyShop(28992579), true);
 });
 
-test("allows only configured factory shop", () => {
-  assert.equal(assertWritablePrintifyShop(9999999, 9999999), true);
-  assert.throws(() => assertWritablePrintifyShop(1111111, 9999999), /non-factory/);
+test("permanently blocks legacy Norway Designs shop", () => {
+  assert.throws(() => assertWritablePrintifyShop(4788136), /permanently blocked/);
+});
+
+test("rejects every other Printify shop", () => {
+  assert.throws(() => assertWritablePrintifyShop(1111111), /non-factory/);
 });
