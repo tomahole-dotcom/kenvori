@@ -1,6 +1,6 @@
 {
   "id": "KF-CANDIDATE-0001",
-  "stage": "ARTWORK_QA_FAILED",
+  "stage": "ARTWORK_QA_FAILED_2",
   "safeMode": true,
   "productFamily": "mug",
   "blueprintId": 68,
@@ -55,22 +55,24 @@
     "status": "FAIL",
     "checkedAt": "2026-09-18",
     "reasons": [
-      "Generated asset is a presentation/mockup collage, not a standalone transparent print master.",
-      "Artwork deviates from locked brief: smiling sun, botanical sprigs and heart were introduced instead of the understated checked-box/institutional-seal concept.",
-      "Second generated mockup introduced unapproved extra copy on alternate mug views and packaging.",
-      "Mockup text/claims such as product details and gift-ready presentation are not authoritative Printify data and must not be treated as listing assets."
+      "Regenerated image still violates the locked visual brief: smiling sun, foliage, sparkles and heart remain instead of understated checked-box institutional seal.",
+      "Rendered primary lettering is visually unreadable/obscured, so exact text cannot be certified.",
+      "Asset appears to include dark/black background or transparency rendering that is unsafe to treat as a verified transparent print master.",
+      "Glow/soft-edge effects are unsuitable for the requested clean flat print treatment."
     ],
-    "action": "REGENERATE_PRINT_MASTER_ONLY"
+    "action": "STOP_IMAGE_MODEL_RETRIES; BUILD_DETERMINISTIC_PRINT_MASTER"
   },
   "publish": {
     "authorized": false
   },
   "artwork": {
-    "status": "REJECTED",
+    "status": "REJECTED_SECOND_PASS",
     "acceptedAssets": [],
     "referenceOnly": [
       "generation 13196a10-5ed6-4935-9186-351a6146a406",
-      "generation c96e5157-3140-42cc-a659-4fc0a43c5bdb"
-    ]
+      "generation c96e5157-3140-42cc-a659-4fc0a43c5bdb",
+      "generation cc145051-497e-45fe-9906-039d3697efda"
+    ],
+    "nextMethod": "deterministic SVG/vector composition with exact text, then rasterize to transparent PNG at Printify geometry"
   }
 }
