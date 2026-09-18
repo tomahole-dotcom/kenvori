@@ -1,0 +1,2 @@
+import {IP_GATE_0001} from "./ip-gate.js";import {candidate0001Pricing} from "./candidate-0001-pricing.js";
+export function candidate0001Ready(){const e=candidate0001Pricing();const ready=IP_GATE_0001.status==="GREEN_PREFLIGHT"&&e.gate.qa==="PASS"&&e.gate.economics==="PASS";return {candidate:"KF-CANDIDATE-0001",qa:e.gate.qa,economics:e.gate.economics,ip:IP_GATE_0001.status,status:ready?"PRODUCT_READY":"BLOCKED",safeMode:true,publishAllowed:false,next:ready?"BUILD_ETSY_DRAFT_METADATA_AND_FINAL_PRODUCT_DRAFT":"RESOLVE_BLOCKERS"};}
