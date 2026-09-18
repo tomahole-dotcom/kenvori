@@ -1,6 +1,6 @@
 {
   "id": "KF-CANDIDATE-0001",
-  "stage": "CREATIVE_BRIEF",
+  "stage": "IP_BLOCKED_REWORK",
   "safeMode": true,
   "productFamily": "mug",
   "blueprintId": 68,
@@ -20,16 +20,13 @@
     "Current Etsy mug results show humor, encouragement and giftability as active patterns"
   ],
   "ipPreflight": {
-    "status": "PENDING_FORMAL_CHECK",
-    "forbidden": [
-      "brand names",
-      "logos",
-      "celebrity likenesses",
-      "movie/TV/game characters",
-      "sports marks",
-      "copied Etsy phrases/artwork",
-      "political slogans"
-    ]
+    "status": "RED",
+    "checkedAt": "2026-09-18",
+    "reasons": [
+      "Exact/near-exact 'Tiny Victory Department' wording is already used on marketplace merchandise.",
+      "'Today Counts' is an existing registered-mark phrase used by Josephson Institute; avoid it rather than relying on class/status nuance."
+    ],
+    "action": "REWORK_COPY_BEFORE_ARTWORK"
   },
   "artworkSpec": {
     "format": "PNG",
@@ -45,7 +42,8 @@
     "marginApproved": false
   },
   "qa": {
-    "status": "PENDING"
+    "status": "BLOCKED",
+    "reason": "Artwork must not be generated from an IP-red phrase brief."
   },
   "publish": {
     "authorized": false
