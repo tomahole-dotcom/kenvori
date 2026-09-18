@@ -1,18 +1,18 @@
 {
   "id": "KF-CANDIDATE-0001",
-  "stage": "IP_BLOCKED_REWORK",
+  "stage": "CREATIVE_REWORK_IP_SCREENED",
   "safeMode": true,
   "productFamily": "mug",
   "blueprintId": 68,
   "concept": {
-    "name": "Tiny Victory Department",
-    "audience": "office workers, remote workers, students and everyday gift buyers",
-    "theme": "playful everyday encouragement with faux-corporate visual language",
-    "originalPhrase": "OFFICIAL TINY VICTORY DEPARTMENT",
-    "secondaryText": "TODAY COUNTS.",
-    "visual": "Original cheerful bureaucratic seal: small rising sun, three tiny stars, simple laurel-like abstract marks, imperfect hand-inked linework; no logos, characters, brands or copied artwork.",
-    "style": "warm retro office ephemera, whimsical handmade feel, bold readable typography, limited flat ink palette, transparent background",
-    "placement": "large centered wrap-safe front graphic; must remain readable at mug viewing distance"
+    "name": "Adequate Effort Society",
+    "audience": "office workers, remote workers, students and dry-humor gift buyers",
+    "theme": "deadpan celebration of getting enough done",
+    "originalPhrase": "ADEQUATE EFFORT SOCIETY",
+    "secondaryText": "PRESENT. FUNCTIONAL. CONTINUING.",
+    "visual": "Original faux institutional seal with a tiny checked box, modest sunrise and deliberately understated rays; no third-party logos, characters or copied artwork.",
+    "style": "retro office ephemera, deadpan institutional humor, bold readable type, imperfect hand-inked linework, transparent background",
+    "placement": "centered mug graphic with generous safe area"
   },
   "researchSignals": [
     "Etsy 2026 trend reporting shows demand for whimsy/playful self-expression",
@@ -20,21 +20,31 @@
     "Current Etsy mug results show humor, encouragement and giftability as active patterns"
   ],
   "ipPreflight": {
-    "status": "RED",
+    "status": "AMBER",
     "checkedAt": "2026-09-18",
-    "reasons": [
-      "Exact/near-exact 'Tiny Victory Department' wording is already used on marketplace merchandise.",
-      "'Today Counts' is an existing registered-mark phrase used by Josephson Institute; avoid it rather than relying on class/status nuance."
-    ],
-    "action": "REWORK_COPY_BEFORE_ARTWORK"
+    "webPhraseScreen": {
+      "exactMerchHitsFound": false,
+      "queries": [
+        "\"Adequate Effort Society\" mug",
+        "\"Certificate of Adequate Effort\" mug",
+        "\"Adequate Effort Club\" mug",
+        "\"Adequate Effort\" trademark"
+      ]
+    },
+    "note": "Web phrase screen found no obvious exact merchandise/trademark collision. This is not a formal trademark clearance; retain pre-publish IP gate."
   },
   "artworkSpec": {
     "format": "PNG",
     "background": "transparent",
-    "targetPx": "high-resolution master; exact Printify placement geometry to be derived from live blueprint before upload",
     "textMustBeExact": [
-      "OFFICIAL TINY VICTORY DEPARTMENT",
-      "TODAY COUNTS."
+      "ADEQUATE EFFORT SOCIETY",
+      "PRESENT. FUNCTIONAL. CONTINUING."
+    ],
+    "requirements": [
+      "high-resolution master",
+      "no gradients required for print legibility",
+      "no copyrighted/brand imagery",
+      "derive final pixel geometry from live Printify placement before upload"
     ]
   },
   "economics": {
@@ -42,8 +52,7 @@
     "marginApproved": false
   },
   "qa": {
-    "status": "BLOCKED",
-    "reason": "Artwork must not be generated from an IP-red phrase brief."
+    "status": "READY_FOR_ARTWORK"
   },
   "publish": {
     "authorized": false
