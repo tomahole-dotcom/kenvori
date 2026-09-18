@@ -1,3 +1,5 @@
+import { assertWritablePrintifyShop } from "./shop-guard.js";
+
 const BASE = "https://api.printify.com/v1";
 
 export class Printify {
@@ -22,37 +24,35 @@ export class Printify {
     return body;
   }
 
+  assertWriteTarget(){ return assertWritablePrintifyShop(this.shopId); }
+
   shops() { return this.request("/shops.json"); }
   blueprints() { return this.request("/catalog/blueprints.json"); }
   blueprint(id) { return this.request(`/catalog/blueprints/${Number(id)}.json`); }
-  printProviders(blueprintId) {
-    return this.request(`/catalog/blueprints/${Number(blueprintId)}/print_providers.json`);
-  }
-  variants(blueprintId, providerId) {
-    return this.request(`/catalog/blueprints/${Number(blueprintId)}/print_providers/${Number(providerId)}/variants.json`);
-  }
-  shipping(blueprintId, providerId) {
-    return this.request(`/catalog/blueprints/${Number(blueprintId)}/print_providers/${Number(providerId)}/shipping.json`);
-  }
+  printProviders(blueprintId) { return this.request(`/catalog/blueprints/${Number(blueprintId)}/print_providers.json`); }
+  variants(blueprintId, providerId) { return this.request(`/catalog/blueprints/${Number(blueprintId)}/print_providers/${Number(providerId)}/variants.json`); }
+  shipping(blueprintId, providerId) { return this.request(`/catalog/blueprints/${Number(blueprintId)}/print_providers/${Number(providerId)}/shipping.json`); }
   uploadFromUrl(fileName, url) {
-    return this.request("/uploads/images.json", {
-      method: "POST", body: JSON.stringify({ file_name: fileName, url })
-    });
+    return this.request("/uploads/images.json", {method:"POST",body:JSON.stringify({file_name:fileName,url})});
   }
   createProduct(product) {
-    return this.request(`/shops/${this.shopId}/products.json`, {
-      method: "POST", body: JSON.stringify(product)
-    });
+    this.assertWriteTarget();
+    return this.request(`/shops/${this.shopId}/products.json`, {method:"POST",body:JSON.stringify(product)});
+  }
+  updateProduct(id, product) {
+    this.assertWriteTarget();
+    return this.request(`/shops/${this.shopId}/products/${id}.json`, {method:"PUT",body:JSON.stringify(product)});
+  }
+  deleteProduct(id) {
+    this.assertWriteTarget();
+    return this.request(`/shops/${this.shopId}/products/${id}.json`, {method:"DELETE"});
   }
   getProduct(id) { return this.request(`/shops/${this.shopId}/products/${id}.json`); }
   publish(id) {
+    this.assertWriteTarget();
     return this.request(`/shops/${this.shopId}/products/${id}/publish.json`, {
-      method: "POST",
-      body: JSON.stringify({
-        title: true, description: true, images: true,
-        variants: true, tags: true, keyFeatures: true,
-        shipping_template: true
-      })
+      method:"POST",
+      body:JSON.stringify({title:true,description:true,images:true,variants:true,tags:true,keyFeatures:true,shipping_template:true})
     });
   }
 }
