@@ -14,5 +14,7 @@ export default async()=>{let sql;try{
  await sql`insert into integration_state(key,value,updated_at) values('etsy_shop',${sql.json({shopId:67619195,shopName:"Kenvori",verified:true})},now()) on conflict(key) do update set value=excluded.value,updated_at=now()`;
  const pp=await fetch("https://openapi.etsy.com/v3/application/shops/67619195/production-partners",{headers});
  const partners=pp.ok?await pp.json():null;
- return Response.json({ok:true,shop:{shopId:67619195,shopName:"Kenvori"},locked:true,productionPartnersStatus:pp.status,productionPartners:partners?.results?.map(x=>({id:x.production_partner_id,name:x.partner_name||x.public_name||x.name}))||[],etsyWrites:false,tokensExposed:false});
+ const partnerRows=partners?.results||[];
+ if(partnerRows.length){await sql`insert into integration_state(key,value,updated_at) values('etsy_production_partners',${sql.json(partnerRows.map(x=>({id:x.production_partner_id,name:x.partner_name||x.public_name||x.name||null})))},now()) on conflict(key) do update set value=excluded.value,updated_at=now()`;}
+ return Response.json({ok:true,shop:{shopId:67619195,shopName:"Kenvori"},locked:true,productionPartnersStatus:pp.status,productionPartners:partnerRows.map(x=>({id:x.production_partner_id,name:x.partner_name||x.public_name||x.name||null})),productionPartnersLocked:partnerRows.length>0,etsyWrites:false,tokensExposed:false});
 }catch(e){return Response.json({ok:false,error:String(e?.message||e),etsyWrites:false},{status:500});}finally{if(sql)await sql.end({timeout:1});}};
