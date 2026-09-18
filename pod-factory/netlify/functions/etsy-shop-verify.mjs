@@ -6,9 +6,6 @@ export default async()=>{try{
  const userId=String(token).split(".")[0];
  if(!/^\d+$/.test(userId)) return Response.json({ok:false,error:"Unable to derive Etsy user id",writes:false},{status:500});
  const headers={"Authorization":`Bearer ${token}`,"x-api-key":`${key}:${secret}`};
- const u=await fetch(`https://openapi.etsy.com/v3/application/users/${userId}`,{headers});
- if(!u.ok) return Response.json({ok:false,stage:"user",status:u.status,writes:false},{status:502});
- const user=await u.json();
  const s=await fetch(`https://openapi.etsy.com/v3/application/users/${userId}/shops`,{headers});
  if(!s.ok) return Response.json({ok:false,stage:"shops",status:s.status,writes:false},{status:502});
  const shops=await s.json();
