@@ -1,6 +1,6 @@
 {
   "id": "KF-CANDIDATE-0001",
-  "stage": "CREATIVE_REWORK_IP_SCREENED",
+  "stage": "ARTWORK_QA_FAILED",
   "safeMode": true,
   "productFamily": "mug",
   "blueprintId": 68,
@@ -52,9 +52,25 @@
     "marginApproved": false
   },
   "qa": {
-    "status": "READY_FOR_ARTWORK"
+    "status": "FAIL",
+    "checkedAt": "2026-09-18",
+    "reasons": [
+      "Generated asset is a presentation/mockup collage, not a standalone transparent print master.",
+      "Artwork deviates from locked brief: smiling sun, botanical sprigs and heart were introduced instead of the understated checked-box/institutional-seal concept.",
+      "Second generated mockup introduced unapproved extra copy on alternate mug views and packaging.",
+      "Mockup text/claims such as product details and gift-ready presentation are not authoritative Printify data and must not be treated as listing assets."
+    ],
+    "action": "REGENERATE_PRINT_MASTER_ONLY"
   },
   "publish": {
     "authorized": false
+  },
+  "artwork": {
+    "status": "REJECTED",
+    "acceptedAssets": [],
+    "referenceOnly": [
+      "generation 13196a10-5ed6-4935-9186-351a6146a406",
+      "generation c96e5157-3140-42cc-a659-4fc0a43c5bdb"
+    ]
   }
 }
