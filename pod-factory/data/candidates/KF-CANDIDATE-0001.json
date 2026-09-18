@@ -1,6 +1,6 @@
 {
   "id": "KF-CANDIDATE-0001",
-  "stage": "ARTWORK_QA_FAILED_2",
+  "stage": "DETERMINISTIC_MASTER_CREATED",
   "safeMode": true,
   "productFamily": "mug",
   "blueprintId": 68,
@@ -52,27 +52,32 @@
     "marginApproved": false
   },
   "qa": {
-    "status": "FAIL",
-    "checkedAt": "2026-09-18",
-    "reasons": [
-      "Regenerated image still violates the locked visual brief: smiling sun, foliage, sparkles and heart remain instead of understated checked-box institutional seal.",
-      "Rendered primary lettering is visually unreadable/obscured, so exact text cannot be certified.",
-      "Asset appears to include dark/black background or transparency rendering that is unsafe to treat as a verified transparent print master.",
-      "Glow/soft-edge effects are unsuitable for the requested clean flat print treatment."
-    ],
-    "action": "STOP_IMAGE_MODEL_RETRIES; BUILD_DETERMINISTIC_PRINT_MASTER"
+    "status": "MASTER_PASS_GEOMETRY_PENDING",
+    "checks": {
+      "exactCopy": true,
+      "transparentBackground": true,
+      "noMockup": true,
+      "noExtraCopy": true,
+      "flatPrintTreatment": true,
+      "printifyGeometry": false
+    }
   },
   "publish": {
     "authorized": false
   },
   "artwork": {
-    "status": "REJECTED_SECOND_PASS",
-    "acceptedAssets": [],
-    "referenceOnly": [
-      "generation 13196a10-5ed6-4935-9186-351a6146a406",
-      "generation c96e5157-3140-42cc-a659-4fc0a43c5bdb",
-      "generation cc145051-497e-45fe-9906-039d3697efda"
+    "status": "MASTER_CREATED",
+    "method": "deterministic raster composition",
+    "file": "KF-CANDIDATE-0001_print_master.png",
+    "canvasPx": [
+      4500,
+      4500
     ],
-    "nextMethod": "deterministic SVG/vector composition with exact text, then rasterize to transparent PNG at Printify geometry"
+    "background": "transparent RGBA",
+    "lockedText": [
+      "ADEQUATE EFFORT SOCIETY",
+      "PRESENT. FUNCTIONAL. CONTINUING."
+    ],
+    "note": "Master is not yet Printify-upload-ready until live placeholder geometry is applied."
   }
 }
