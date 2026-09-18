@@ -5,6 +5,8 @@ export default async()=>{
  const h={Authorization:`Bearer ${token}`,"User-Agent":"Kenvori-POD-Factory"};
  const base=`https://api.printify.com/v2/catalog/blueprints/${B}/print_providers/${P}/shipping`;
  const providerReq=await fetch(`https://api.printify.com/v1/catalog/print_providers/${P}.json`,{headers:h}); const provider=await providerReq.json();
+ const providersReq=await fetch("https://api.printify.com/v1/catalog/print_providers.json",{headers:h}); const providers=await providersReq.json();
+ const providerFromList=(Array.isArray(providers)?providers:providers?.data||[]).find(x=>Number(x.id)===P)||null;
  const root=await fetch(base+".json",{headers:h}); const rd=await root.json();
  if(!root.ok)return Response.json({ok:false,status:root.status,error:rd},{status:502});
  const methods=(rd.data||[]).map(x=>x.attributes?.name).filter(Boolean),summary={};
@@ -13,5 +15,5 @@ export default async()=>{
   const rows=(d.data||[]).filter(x=>Number(x.attributes?.variantId)===V).map(x=>({country:x.attributes?.country?.code,firstItem:x.attributes?.shippingCost?.firstItem?.amount,additional:x.attributes?.shippingCost?.additionalItems?.amount,currency:x.attributes?.shippingCost?.firstItem?.currency,handlingDays:x.attributes?.handlingTime}));
   summary[m]={count:rows.length,US:rows.find(x=>x.country==="US")||null,NO:rows.find(x=>x.country==="NO")||null,REST_OF_THE_WORLD:rows.find(x=>x.country==="REST_OF_THE_WORLD")||null};
  }
- return Response.json({ok:true,blueprintId:B,providerId:P,provider:{title:provider?.title||null,location:provider?.location||null},variantId:V,summary,writes:false,ordersTouched:false});
+ return Response.json({ok:true,blueprintId:B,providerId:P,provider:{singleStatus:providerReq.status,listStatus:providersReq.status,title:provider?.title||providerFromList?.title||null,location:provider?.location||providerFromList?.location||null},variantId:V,summary,writes:false,ordersTouched:false});
 };
