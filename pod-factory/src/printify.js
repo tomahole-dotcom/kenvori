@@ -4,7 +4,7 @@ export class Printify {
   constructor(token, shopId) {
     if (!token || !shopId) throw new Error("PRINTIFY_API_TOKEN and PRINTIFY_SHOP_ID are required");
     this.token = token;
-    this.shopId = shopId;
+    this.shopId = Number(shopId);
   }
 
   async request(path, options = {}) {
@@ -23,6 +23,17 @@ export class Printify {
   }
 
   shops() { return this.request("/shops.json"); }
+  blueprints() { return this.request("/catalog/blueprints.json"); }
+  blueprint(id) { return this.request(`/catalog/blueprints/${Number(id)}.json`); }
+  printProviders(blueprintId) {
+    return this.request(`/catalog/blueprints/${Number(blueprintId)}/print_providers.json`);
+  }
+  variants(blueprintId, providerId) {
+    return this.request(`/catalog/blueprints/${Number(blueprintId)}/print_providers/${Number(providerId)}/variants.json`);
+  }
+  shipping(blueprintId, providerId) {
+    return this.request(`/catalog/blueprints/${Number(blueprintId)}/print_providers/${Number(providerId)}/shipping.json`);
+  }
   uploadFromUrl(fileName, url) {
     return this.request("/uploads/images.json", {
       method: "POST", body: JSON.stringify({ file_name: fileName, url })
