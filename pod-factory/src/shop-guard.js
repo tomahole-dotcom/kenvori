@@ -1,6 +1,7 @@
+export const FACTORY_PRINTIFY_SHOP_ID = 28992579;
 export const BLOCKED_PRINTIFY_SHOP_IDS = Object.freeze([4788136]);
 
-export function assertWritablePrintifyShop(shopId, factoryShopId) {
+export function assertWritablePrintifyShop(shopId, factoryShopId = FACTORY_PRINTIFY_SHOP_ID) {
   const id = Number(shopId);
   const target = Number(factoryShopId);
   if (!Number.isFinite(id) || !Number.isFinite(target)) {
