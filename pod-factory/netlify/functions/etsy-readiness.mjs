@@ -1,0 +1,2 @@
+import {etsyChannelGate} from "../../src/etsy-gate.js";
+export default async()=>Response.json({ok:true,candidate:"KF-CANDIDATE-0001",printifyDraftReady:true,etsy:etsyChannelGate(),credentialsPresent:{etsyApiKey:Boolean(Netlify.env.get("ETSY_API_KEY")),etsyAccessToken:Boolean(Netlify.env.get("ETSY_ACCESS_TOKEN"))},writes:false,publishAllowed:false,next:"VERIFY_OR_CONNECT_ETSY_OPEN_API_OAUTH"});
