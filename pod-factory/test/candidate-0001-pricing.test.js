@@ -1,0 +1,2 @@
+import test from "node:test";import assert from "node:assert/strict";import {candidate0001Pricing} from "../src/candidate-0001-pricing.js";
+test("candidate 0001 has positive US economics and remains IP-blocked",()=>{const r=candidate0001Pricing();assert.equal(r.base.ready,true);assert.ok(r.base.profitCents>0);assert.equal(r.gate.economics,"PASS");assert.equal(r.gate.ip,"AMBER");assert.equal(r.gate.publish,"BLOCKED_UNTIL_IP_GREEN");});
