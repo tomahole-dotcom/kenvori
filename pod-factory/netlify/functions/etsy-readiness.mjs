@@ -14,7 +14,7 @@ export default async()=>{try{
  const shippingProfiles=shipping.data?.results||[],processingProfiles=processing.data?.results||[],mugTaxonomy=walk(tax.data?.results||[]).slice(0,30);
  return Response.json({ok:shipping.ok&&processing.ok&&tax.ok,shopId:SHOP_ID,
   shipping:{status:shipping.status,count:shippingProfiles.length,profiles:shippingProfiles.map(x=>({id:x.shipping_profile_id,title:x.title,origin:x.origin_country_iso}))},
-  processing:{status:processing.status,count:processingProfiles.length,profiles:processingProfiles.map(x=>({id:x.readiness_state_id,state:x.readiness_state,min:x.min_processing_time,max:x.max_processing_time}))},
+  processing:{status:processing.status,count:processingProfiles.length,profiles:processingProfiles.map(x=>({id:x.readiness_state_id,state:x.readiness_state,min:x.min_processing_time??x.processing_time?.min??null,max:x.max_processing_time??x.processing_time?.max??null,raw:x}))},
   taxonomy:{status:tax.status,mugCandidates:mugTaxonomy},
   productionPartnerId:580156,writes:false,publishAllowed:false,tokensExposed:false});
 }catch(e){return Response.json({ok:false,error:String(e?.message||e),writes:false,publishAllowed:false},{status:500})}};
