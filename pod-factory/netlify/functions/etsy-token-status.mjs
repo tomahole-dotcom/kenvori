@@ -1,0 +1,2 @@
+import {tokenMeta} from "../../src/token-store.js";
+export default async()=>{try{const m=await tokenMeta("etsy");return Response.json({ok:true,connected:Boolean(m),scope:m?.scope||null,expiresAt:m?.expires_at||null,updatedAt:m?.updated_at||null,tokensExposed:false,writes:false});}catch{return Response.json({ok:false,connected:false,error:"token store unavailable"},{status:500});}};
