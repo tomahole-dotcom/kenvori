@@ -1,0 +1,2 @@
+import {CANDIDATE_0001_LISTING as listing} from "./candidate-0001-listing.js";import {candidate0001Ready} from "./candidate-0001-ready.js";import {placementRule} from "./placement-rules.js";
+export function candidate0001Final(){const r=candidate0001Ready();return {candidate:r.candidate,status:r.status,printify:{shopId:28992579,productId:"6aad9f6ec1ac4a4c9a041f54",blueprintId:68,providerId:1,variantId:33719,placement:placementRule(68,1,33719)},listing,safeMode:true,publishAllowed:false,etsyTouched:false,next:"FINALIZE_PRINTIFY_DRAFT_METADATA_AND_MOCKUP_SET"};}
