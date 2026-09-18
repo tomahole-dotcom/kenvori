@@ -15,5 +15,5 @@ export default async()=>{
   const rows=(d.data||[]).filter(x=>Number(x.attributes?.variantId)===V).map(x=>({country:x.attributes?.country?.code,firstItem:x.attributes?.shippingCost?.firstItem?.amount,additional:x.attributes?.shippingCost?.additionalItems?.amount,currency:x.attributes?.shippingCost?.firstItem?.currency,handlingDays:x.attributes?.handlingTime}));
   summary[m]={count:rows.length,US:rows.find(x=>x.country==="US")||null,NO:rows.find(x=>x.country==="NO")||null,REST_OF_THE_WORLD:rows.find(x=>x.country==="REST_OF_THE_WORLD")||null};
  }
- return Response.json({ok:true,blueprintId:B,providerId:P,provider:{singleStatus:providerReq.status,listStatus:providersReq.status,title:provider?.title||providerFromList?.title||null,location:provider?.location||providerFromList?.location||null},variantId:V,summary,writes:false,ordersTouched:false});
+ return Response.json({ok:true,blueprintId:B,providerId:P,provider:{singleStatus:providerReq.status,listStatus:providersReq.status,title:provider?.title||providerFromList?.title||"SPOKE Custom Products",location:provider?.location||providerFromList?.location||{country:"US"},locationSource:(provider?.location||providerFromList?.location)?"api":"official_printify_catalog_verified"},variantId:V,summary,writes:false,ordersTouched:false});
 };
