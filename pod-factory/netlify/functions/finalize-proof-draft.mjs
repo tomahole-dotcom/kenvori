@@ -4,7 +4,7 @@ const TITLE="Adequate Effort Society Mug | Funny Office & Coworker Gift";
 const TAGS=["funny office mug","coworker gift","work from home","dry humor gift","funny coffee mug","office humor","employee gift","remote worker gift","adequate effort","work mug","student gift","ceramic mug","funny work gift"];
 const DESCRIPTION=`ADEQUATE EFFORT SOCIETY\n\nPresent. Functional. Continuing.\n\nA deadpan office-humor mug for anyone who believes showing up and remaining operational deserves recognition. Original Kenvori faux-institutional seal design.\n\n11 oz ceramic mug. Printed to order by a disclosed production partner. Colors may vary slightly between screens and the finished print.`;
 export default async(req)=>{
- if(req.method!=="POST")return Response.json({ok:false,error:"POST only"},{status:405});
+ if(!["GET","POST"].includes(req.method))return Response.json({ok:false,error:"GET or POST only"},{status:405});
  const token=Netlify.env.get("PRINTIFY_API_TOKEN");if(!token)return Response.json({ok:false,error:"token missing"},{status:500});
  const h={Authorization:`Bearer ${token}`,"Content-Type":"application/json;charset=utf-8","User-Agent":"Kenvori-POD-Factory"};
  const get=await fetch(`https://api.printify.com/v1/shops/${SHOP}/products/${PRODUCT}.json`,{headers:h});const before=await get.json();
