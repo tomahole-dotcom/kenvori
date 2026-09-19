@@ -1,0 +1,5 @@
+import {normalizeSignal} from "./discovery-signals.js";
+export function fromGoogleTrends(rows=[]){return rows.map(r=>normalizeSignal({...r,source:"google_trends",searchInterest:r.interest,growth:r.growthPct}))}
+export function fromEtsyMarket(rows=[]){return rows.map(r=>normalizeSignal({...r,source:"etsy_market",resultCount:r.resultCount,competition:r.competitionScore,priceMedian:r.medianPrice,reviewVelocity:r.reviewVelocity}))}
+export function fromPinterestTrends(rows=[]){return rows.map(r=>normalizeSignal({...r,source:"pinterest_trends",searchInterest:r.interest,growth:r.growthPct}))}
+export function fromInternalPerformance(rows=[]){return rows.map(r=>normalizeSignal({...r,source:"kenvori_performance",searchInterest:r.impressionScore,growth:r.velocityPct,reviewVelocity:r.conversionScore}))}
