@@ -1,5 +1,5 @@
 // Normalizes real discovery feeds before scoring. Feed adapters stay source-specific.
-const n=v=>Number.isFinite(Number(v))?Number(v):null;
+const n=v=>v===null||v===undefined||v===""?null:(Number.isFinite(Number(v))?Number(v):null);
 export function normalizeSignal(x={}){
  return {source:String(x.source||"unknown"),query:String(x.query||x.keyword||"").trim(),productType:String(x.productType||"").trim(),audience:String(x.audience||"").trim(),theme:String(x.theme||"").trim(),observedAt:x.observedAt||new Date().toISOString(),metrics:{searchInterest:n(x.searchInterest),growth:n(x.growth),resultCount:n(x.resultCount),competition:n(x.competition),priceMedian:n(x.priceMedian),reviewVelocity:n(x.reviewVelocity)},rawRef:x.rawRef||null};
 }
