@@ -15,4 +15,6 @@ export function productScore({marginPct,providerCount=0,designFlexibility=0,auto
  if(!Number.isFinite(Number(marginPct)))return null; const margin=Math.max(0,Math.min(100,Number(marginPct))),provider=Math.min(100,Math.max(0,Number(providerCount)||0)*12.5);
  return Math.round((margin*.35+provider*.15+designFlexibility*.15+automationFit*.15+shippingSimplicity*.1+evergreen*.1)*100)/100;
 }
-export function economicsGate(input){const c=contribution(input);const min=Number(input.minMarginPct??25);return {...c,minMarginPct:min,marginApproved:c.ready&&c.grossCents>0&&c.marginPct>=min};}
+// Factory profitability policy: 35% is the default hard floor. A candidate below this
+// cannot pass economics without an explicit per-candidate override and recorded reason.
+export function economicsGate(input){const c=contribution(input);const min=Number(input.minMarginPct??35);return {...c,minMarginPct:min,marginApproved:c.ready&&c.grossCents>0&&c.marginPct>=min};}
