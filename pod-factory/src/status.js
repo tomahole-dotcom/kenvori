@@ -10,7 +10,8 @@ export function productReadiness(candidate={}) {
   if(candidate.ipRisk!=="GREEN") blockers.push("IP_RISK_NOT_GREEN");
   if(candidate.economicsReady!==true) blockers.push("ECONOMICS_INCOMPLETE");
   if(candidate.marginApproved!==true) blockers.push("MARGIN_NOT_APPROVED");
-  if(Number(candidate.marginPct)<35) blockers.push("MARGIN_BELOW_HARD_FLOOR");
+  if(!Number.isFinite(Number(candidate.marginPct))) blockers.push("MARGIN_PCT_MISSING");
+  else if(Number(candidate.marginPct)<35) blockers.push("MARGIN_BELOW_HARD_FLOOR");
   if(candidate.multiItemEconomicsReady!==true) blockers.push("MULTI_ITEM_ECONOMICS_INCOMPLETE");
   if(candidate.multiItemMarginApproved!==true) blockers.push("MULTI_ITEM_MARGIN_NOT_APPROVED");
   if(candidate.shippingProfileVerified!==true) blockers.push("SHIPPING_PROFILE_NOT_VERIFIED");
