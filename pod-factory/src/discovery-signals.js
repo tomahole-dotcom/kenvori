@@ -12,5 +12,6 @@ export function deriveOpportunity(g={}){
  const vals=k=>g.sources.map(s=>s.metrics[k]).filter(Number.isFinite);
  const avg=k=>{const a=vals(k);return a.length?a.reduce((x,y)=>x+y,0)/a.length:null};
  const interest=avg("searchInterest"),growth=avg("growth"),comp=avg("competition"),rv=avg("reviewVelocity"),price=avg("priceMedian");
- return {...g,demand:Math.min(100,(interest??50)*.7+(rv??50)*.3),trend:Math.min(100,Math.max(0,50+(growth??0))),competitionGap:comp==null?50:100-comp,marginPotential:price==null?50:Math.min(100,price*2.5),automationFit:80,originalityRoom:65,seasonality:50,evidence:{sourceCount:g.sourceCount}};
+ const demandParts=[interest,rv].filter(Number.isFinite); const demand=demandParts.length?demandParts.reduce((a,b)=>a+b,0)/demandParts.length:50;
+ return {...g,demand:Math.min(100,demand),trend:Math.min(100,Math.max(0,50+(growth??0))),competitionGap:comp==null?50:100-comp,marginPotential:price==null?50:Math.min(100,price*2.5),automationFit:80,originalityRoom:65,seasonality:50,evidence:{sourceCount:g.sourceCount}};
 }
