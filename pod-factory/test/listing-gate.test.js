@@ -1,0 +1,3 @@
+import test from "node:test";import assert from "node:assert/strict";import {buildEtsyPackage,etsyPackageGate,finalFactoryGate} from "../src/listing-gate.js";
+test("final gate is safe by default",()=>{const x=Object.fromEntries(["researchApproved","creativeApproved","productFitApproved","economicsApproved","artworkQaPass","printifyQaPass","ipGreen","etsyPackageReady","shippingVerified","productionPartnerVerified"].map(k=>[k,true]));const g=finalFactoryGate(x);assert.equal(g.ready,true);assert.equal(g.publishAllowed,false)});
+test("etsy package fails closed",()=>assert.equal(etsyPackageGate(buildEtsyPackage({title:"x"})).ok,false));
