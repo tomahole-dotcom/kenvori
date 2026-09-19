@@ -19,4 +19,6 @@ test("fails closed on shipping, partner or multi-item economics",()=>{
  assert.equal(productReadiness({...approved,productionPartnerVerified:false}).ready,false);
  assert.equal(productReadiness({...approved,multiItemMarginApproved:false}).ready,false);
  assert.equal(productReadiness({...approved,marginPct:34.99}).ready,false);
+ assert.equal(productReadiness({...approved,marginPct:undefined}).ready,false);
+ assert.ok(productReadiness({...approved,marginPct:undefined}).blockers.includes("MARGIN_PCT_MISSING"));
 });
