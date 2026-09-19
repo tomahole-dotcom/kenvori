@@ -29,6 +29,7 @@ Colors can vary slightly between screens and the finished printed product.`,
  aiDisclosureRequired:false,
  personalization:false,
  quantity:999,
+ taxonomy:{id:1062,name:"Mugs",source:"etsy_seller_taxonomy",selectionMode:"automatic",confidence:"locked_for_candidate"},
  taxonomyHint:"mug",
  status:"READY_FOR_DRAFT"
 });
