@@ -40,7 +40,7 @@ export function productScore({marginPct,providerCount=0,designFlexibility=0,auto
 export function economicsGate(input){const c=contribution(input);const min=Number(input.minMarginPct??35);return {...c,minMarginPct:min,marginApproved:c.ready&&c.grossCents>0&&c.marginPct>=min};}
 
 export function multiItemEconomics({quantities=[1,2,3,5],salePriceCents,firstItemBuyerShippingCents=0,additionalBuyerShippingCents=0,baseCostCents,firstItemShippingCents,additionalItemShippingCents,...fees}){
- const required={salePriceCents,firstItemBuyerShippingCents,additionalItemBuyerShippingCents,baseCostCents,firstItemShippingCents,additionalItemShippingCents};
+ const required={salePriceCents,firstItemBuyerShippingCents,additionalBuyerShippingCents,baseCostCents,firstItemShippingCents,additionalItemShippingCents};
  const missing=Object.entries(required).filter(([,v])=>money(v)===null).map(([k])=>k);
  if(missing.length)return {ready:false,marginApproved:false,targetMarginReached:false,worstMarginPct:null,missing,rows:[]};
  const rows=quantities.map(quantity=>{
