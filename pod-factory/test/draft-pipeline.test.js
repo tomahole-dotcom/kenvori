@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { createPrintifyDraft, validateDraftPayload } from "../src/draft-pipeline.js";
 
 const product={title:"TEST — DO NOT PUBLISH",description:"Factory QA fixture",blueprint_id:68,print_provider_id:1,variants:[{id:1,price:1999,is_enabled:true}],print_areas:[{variant_ids:[1],placeholders:[{position:"front",images:[{id:"fixture",x:0.5,y:0.5,scale:1,angle:0}]}]}]};
-const ready={qa:"PASS",ipRisk:"GREEN",economicsReady:true,marginApproved:true,printifyShopId:28992579,safeMode:true,humanHold:false};
+const ready={qa:"PASS",ipRisk:"GREEN",economicsReady:true,marginApproved:true,marginPct:40,multiItemEconomicsReady:true,multiItemMarginApproved:true,shippingProfileVerified:true,productionPartnerVerified:true,printifyShopId:28992579,safeMode:true,humanHold:false};
 
 test("validates complete draft payload",()=>assert.equal(validateDraftPayload(product).valid,true));
 
