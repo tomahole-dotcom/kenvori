@@ -1,0 +1,3 @@
+import test from "node:test";import assert from "node:assert/strict";import {createArtworkQueue,technicalArtworkGate} from "../src/artwork-engine.js";
+test("creates jobs only for economics-approved candidates",()=>{const q=createArtworkQueue([{candidateKey:"auto-0001",status:"READY_FOR_ARTWORK",winners:[{concept:{creativeDirection:"surreal graphic",conceptPrompt:"x"},products:[{name:"poster"},{name:"tote"}]}]}]);assert.equal(q.length,2);assert.equal(q[0].status,"ARTWORK_REQUESTED")});
+test("artwork fails closed until print area is verified",()=>{const g=technicalArtworkGate({}, {masterRef:"x",width:3000,height:3000,mockupBakedIn:false,ipHold:false,printAreaVerified:false});assert.equal(g.ok,false);assert.ok(g.errors.includes("PRINT_AREA_UNVERIFIED"))});
