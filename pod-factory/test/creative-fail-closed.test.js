@@ -1,0 +1,3 @@
+import test from "node:test";import assert from "node:assert/strict";import {exploreConcepts,selectConcepts,scoreConcept} from "../src/creative-engine.js";
+test("creative scoring cannot invent evidence",()=>{const c=exploreConcepts({theme:"x",audience:"y"},2);assert.equal(selectConcepts(c).length,0);const s=scoreConcept(c[0],{});assert.equal(s.approved,false);assert.equal(s.status,"CREATIVE_EVIDENCE_INCOMPLETE")});
+test("fully evaluated concept can pass",()=>{const c=exploreConcepts({theme:"x",audience:"y"},1);const e={researchFit:80,originality:85,visualImpact:80,productBreadth:70,productionFit:80,ipSafety:95};assert.equal(selectConcepts(c,()=>e).length,1)});
