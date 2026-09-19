@@ -1,15 +1,13 @@
 const banned=["disney","marvel","star wars","pokemon","harry potter","nike","adidas"];
 const modes=["illustrative editorial","surreal graphic","bold typographic","retro print","maximalist decorative","minimal art","character-free visual humor","folk-inspired geometric","collage-like abstract","playful pattern","premium monoline","unexpected object study"];
-export function creativeBrief(o={},seed=0){
- const mode=modes[Math.abs(Number(seed)||0)%modes.length];
- return {candidateKey:o.candidateKey||null,theme:o.theme,audience:o.audience,occasion:o.occasion||"evergreen",creativeDirection:mode,requirements:["original composition","commercially distinctive","no third-party logos or characters","production-safe artwork"],conceptPrompt:`Create an original ${mode} concept for ${o.audience||"a defined audience"} around ${o.theme||"the researched opportunity"}. Research determines product fit later; do not imitate marketplace artwork or assume one product.`};
-}
+export function creativeBrief(o={},seed=0){const mode=modes[Math.abs(Number(seed)||0)%modes.length];return {candidateKey:o.candidateKey||null,theme:o.theme,audience:o.audience,occasion:o.occasion||"evergreen",creativeDirection:mode,requirements:["original composition","commercially distinctive","no third-party logos or characters","production-safe artwork"],conceptPrompt:`Create an original ${mode} concept for ${o.audience||"a defined audience"} around ${o.theme||"the researched opportunity"}. Research determines product fit later; do not imitate marketplace artwork or assume one product.`};}
 export function exploreConcepts(o={},count=8){return Array.from({length:Math.max(1,count)},(_,i)=>creativeBrief(o,i));}
 export function scoreConcept(c={},signals={}){
- const s={researchFit:Number(signals.researchFit??70),originality:Number(signals.originality??75),visualImpact:Number(signals.visualImpact??70),productBreadth:Number(signals.productBreadth??60),productionFit:Number(signals.productionFit??75),ipSafety:Number(signals.ipSafety??90)};
- const score=Math.round((s.researchFit*.28+s.originality*.22+s.visualImpact*.18+s.productBreadth*.10+s.productionFit*.12+s.ipSafety*.10)*10)/10;
- return {...s,score};
+ const keys=["researchFit","originality","visualImpact","productBreadth","productionFit","ipSafety"],missing=keys.filter(k=>!Number.isFinite(Number(signals[k])));
+ if(missing.length)return {score:null,approved:false,status:"CREATIVE_EVIDENCE_INCOMPLETE",blockers:missing.map(k=>`${k.toUpperCase()}_MISSING`)};
+ const s=Object.fromEntries(keys.map(k=>[k,Number(signals[k])]));const score=Math.round((s.researchFit*.28+s.originality*.22+s.visualImpact*.18+s.productBreadth*.10+s.productionFit*.12+s.ipSafety*.10)*10)/10;
+ return {...s,score,approved:score>=65,status:score>=65?"CREATIVE_APPROVED":"CREATIVE_REJECT",blockers:score>=65?[]:["CREATIVE_SCORE_BELOW_FLOOR"]};
 }
-export function selectConcepts(concepts=[],signalFn=()=>({}),limit=3){return concepts.map((c,i)=>({...c,creativeScore:scoreConcept(c,signalFn(c,i))})).filter(x=>creativePreflight(x).ok).sort((a,b)=>b.creativeScore.score-a.creativeScore.score).slice(0,limit);}
+export function selectConcepts(concepts=[],signalFn=()=>({}),limit=3){return concepts.map((c,i)=>({...c,creativeScore:scoreConcept(c,signalFn(c,i))})).filter(x=>x.creativeScore.approved&&creativePreflight(x).ok).sort((a,b)=>b.creativeScore.score-a.creativeScore.score).slice(0,limit);}
 export function matchProducts(concept={},products=[]){return products.map(p=>{const evidence=Number(p.researchEvidence??0),fit=Number(p.designFit??0),margin=Number(p.marginPotential??0),score=Math.round((evidence*.45+fit*.35+margin*.20)*10)/10;return {...p,matchScore:score,concept:concept.creativeDirection}}).filter(x=>x.researchEvidence>=50&&x.matchScore>=60).sort((a,b)=>b.matchScore-a.matchScore);}
 export function creativePreflight(b={}){const t=JSON.stringify(b).toLowerCase();const hits=banned.filter(x=>t.includes(x));return {ok:hits.length===0,hits,status:hits.length?"IP_HOLD":"CREATIVE_READY"}}
