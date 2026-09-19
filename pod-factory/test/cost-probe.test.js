@@ -1,0 +1,3 @@
+import test from "node:test";import assert from "node:assert/strict";import {buildCostProbe,readActualCost} from "../src/cost-probe.js";
+test("cost probe targets factory shop and stays a draft payload",()=>{const x=buildCostProbe({blueprintId:68,providerId:1,variantId:33719,placeholder:"front",imageId:"img"});assert.equal(x.title.includes("DO NOT PUBLISH"),true);assert.equal(x.variants[0].id,33719)});
+test("actual cost reader fails closed",()=>{assert.deepEqual(readActualCost({variants:[{id:1}]},1),{known:false,costCents:null});assert.deepEqual(readActualCost({variants:[{id:1,cost:644}]},1),{known:true,costCents:644})});
