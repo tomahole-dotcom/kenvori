@@ -1,9 +1,9 @@
 import test from "node:test";import assert from "node:assert/strict";
 import {factoryV1} from "../src/factory-orchestrator.js";import {createArtworkQueue,technicalArtworkGate} from "../src/artwork-engine.js";import {buildPrintifyDraftJob,printifyDraftGate} from "../src/printify-production.js";import {buildEtsyPackage,etsyPackageGate,finalFactoryGate} from "../src/listing-gate.js";
-test("Factory V1 end-to-end reaches safe publish gate",()=>{
+test("Factory V1 end-to-end reaches safe publish gate",()=>{const creativeEvidence={researchFit:85,originality:85,visualImpact:80,productBreadth:80,productionFit:85,ipSafety:95};
  const signals=[{source:"research",query:"original trend",audience:"buyers",theme:"original theme",searchInterest:92,growth:35,competition:20,priceMedian:32,reviewVelocity:80}];
  const products=[{name:"poster",theme:"original theme",researchEvidence:85,designFit:90,marginPotential:80,priceCents:3200,productionCostCents:600,shippingCostCents:400,blueprintId:97,providerId:1,variantIds:[1]}];
- const d=factoryV1({signals,productEvidence:products});assert.equal(d[0].status,"READY_FOR_ARTWORK");
+ const d=factoryV1({signals,productEvidence:products,conceptSignalFn:()=>creativeEvidence});assert.equal(d[0].status,"READY_FOR_ARTWORK");
  const q=createArtworkQueue(d);assert.ok(q.length>0);
  const asset={masterRef:"master",printifyImageId:"img",width:4000,height:5000,mockupBakedIn:false,ipHold:false,printAreaVerified:true};assert.equal(technicalArtworkGate(q[0],asset).ok,true);
  const pj=buildPrintifyDraftJob(q[0],asset,{...products[0],printifyShopId:28992579});assert.equal(pj.publish,false);
