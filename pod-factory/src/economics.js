@@ -38,3 +38,15 @@ export function productScore({marginPct,providerCount=0,designFlexibility=0,auto
 }
 // Factory profitability policy: 35% hard floor, 40% operating target.
 export function economicsGate(input){const c=contribution(input);const min=Number(input.minMarginPct??35);return {...c,minMarginPct:min,marginApproved:c.ready&&c.grossCents>0&&c.marginPct>=min};}
+
+export function multiItemEconomics({quantities=[1,2,3,5],salePriceCents,firstItemBuyerShippingCents=0,additionalBuyerShippingCents=0,baseCostCents,firstItemShippingCents,additionalItemShippingCents,...fees}){
+ const rows=quantities.map(quantity=>{
+  const q=Math.max(1,Math.trunc(Number(quantity)||1));
+  const actual=orderShipping({quantity:q,firstItemShippingCents,additionalItemShippingCents});
+  const itemRevenue=Math.round(Number(salePriceCents)*q);
+  const buyerShipping=Math.round(Number(firstItemBuyerShippingCents)+Math.max(0,q-1)*Number(additionalBuyerShippingCents));
+  const e=etsyOrderEconomics({salePriceCents:itemRevenue,buyerShippingCents:buyerShipping,baseCostCents:Math.round(Number(baseCostCents)*q),shippingCents:actual.shippingCents,...fees});
+  return {quantity:q,...e};
+ });
+ return {ready:rows.every(r=>r.ready),marginApproved:rows.every(r=>r.marginApproved),targetMarginReached:rows.every(r=>r.targetMarginReached),worstMarginPct:rows.length?Math.min(...rows.map(r=>r.marginPct)):null,rows};
+}
