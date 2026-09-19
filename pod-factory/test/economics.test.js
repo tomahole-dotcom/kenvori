@@ -15,5 +15,7 @@ test("scores products deterministically",()=>{
 });
 test("candidate 0001 multi-item shipping clears hard floor for 1,2,3,5 units",()=>{
  const r=multiItemEconomics({salePriceCents:2499,firstItemBuyerShippingCents:299,additionalBuyerShippingCents:0,baseCostCents:644,firstItemShippingCents:669,additionalItemShippingCents:299,paymentFixedCents:27,listingFeeCents:20});
- assert.equal(r.ready,true); assert.equal(r.marginApproved,true); assert.deepEqual(r.rows.map(x=>x.quantity),[1,2,3,5]); assert.ok(r.worstMarginPct>=35);
+ assert.equal(r.ready,true); assert.equal(r.marginApproved,true); assert.deepEqual(r.rows.map(x=>x.quantity),[1,2,3,5]);
+ assert.deepEqual(r.rows.map(x=>x.marginPct),[40.89,46.03,47.86,49.39]);
+ assert.equal(r.worstMarginPct,40.89); assert.ok(r.worstMarginPct>=35);
 });
