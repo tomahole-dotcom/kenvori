@@ -1,0 +1,1 @@
+import test from "node:test";import assert from "node:assert/strict";import {MARKET_SEEDS_2026_09_19,seedsToSignals} from "../src/market-seeds.js";test("market seeds retain dated evidence",()=>{assert.ok(MARKET_SEEDS_2026_09_19.length>=4);const s=seedsToSignals()[0];assert.ok(s.sourceDate);assert.ok(s.rawRef);assert.equal(typeof s.growthPct,"number")});
