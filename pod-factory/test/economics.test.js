@@ -19,3 +19,11 @@ test("candidate 0001 multi-item shipping clears hard floor for 1,2,3,5 units",()
  assert.deepEqual(r.rows.map(x=>x.marginPct),[40.89,46.03,47.86,49.39]);
  assert.equal(r.worstMarginPct,40.89); assert.ok(r.worstMarginPct>=35);
 });
+
+test("multi-item economics fails closed when required cost data is missing",()=>{
+ const r=multiItemEconomics({salePriceCents:2499,firstItemBuyerShippingCents:299,additionalBuyerShippingCents:0,baseCostCents:644,firstItemShippingCents:669});
+ assert.equal(r.ready,false);
+ assert.equal(r.marginApproved,false);
+ assert.deepEqual(r.missing,["additionalItemShippingCents"]);
+ assert.deepEqual(r.rows,[]);
+});
