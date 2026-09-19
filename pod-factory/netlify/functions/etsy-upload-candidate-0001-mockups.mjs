@@ -4,9 +4,11 @@ export default async()=>{try{
  const pt=Netlify.env.get("PRINTIFY_API_TOKEN"), key=Netlify.env.get("ETSY_API_KEY"), secret=Netlify.env.get("ETSY_SHARED_SECRET"), token=await etsyAccessToken();
  const pr=await fetch(`https://api.printify.com/v1/shops/${PSHOP}/products/${PRODUCT}.json`,{headers:{Authorization:`Bearer ${pt}`,"User-Agent":"Kenvori-POD-Factory"}});
  const pd=await pr.json(); if(!pr.ok)return Response.json({ok:false,stage:"printify",status:pr.status,publishAllowed:false},{status:502});
- const imgs=(pd.images||[]).map(x=>({src:x.src,label:new URL(x.src).searchParams.get("camera_label"),is_default:x.is_default}));
- const chosen=["front","right"].map(label=>imgs.find(x=>x.label===label)).filter(Boolean);
- if(chosen.length!==2)return Response.json({ok:false,stage:"select",found:imgs.map(x=>x.label),publishAllowed:false},{status:409});
+ const imgs=(pd.images||[]).map((x,i)=>({src:x.src,label:new URL(x.src).searchParams.get("camera_label")||`mockup-${i+1}`,is_default:x.is_default}));
+ const front=imgs.find(x=>x.label==="front")||imgs.find(x=>x.is_default)||imgs[0];
+ const second=imgs.find(x=>x.label==="right"&&x.src!==front?.src)||imgs.find(x=>x.src!==front?.src);
+ const chosen=[front,second].filter(Boolean);
+ if(chosen.length!==2)return Response.json({ok:false,stage:"select",found:imgs.map(x=>({label:x.label,is_default:x.is_default})),publishAllowed:false},{status:409});
  const out=[];
  for(let i=0;i<chosen.length;i++){
    const ir=await fetch(chosen[i].src); if(!ir.ok)return Response.json({ok:false,stage:"download",label:chosen[i].label,status:ir.status,publishAllowed:false},{status:502});
