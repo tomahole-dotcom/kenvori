@@ -6,8 +6,8 @@ async function retry(fn,max=5){for(let i=0;;i++){try{return await fn()}catch(e){
 export default async(req)=>{
  try{
   const p=new Printify(Netlify.env.get("PRINTIFY_API_TOKEN"),SHOP), blueprints=arr(await retry(()=>p.blueprints()));
-  const cases=blueprints.filter(b=>/phone|iphone|samsung|case/i.test(b.title||"")), ranked=[];
-  for(const b of cases.slice(0,12)){
+  const cases=blueprints.filter(b=>/(phone|iphone|samsung)/i.test(b.title||"") && !/(pillow|airpods|tablet|laptop)/i.test(b.title||"")), ranked=[];
+  for(const b of cases.slice(0,8)){
    const providers=arr(await retry(()=>p.printProviders(b.id)));
    for(const pr of providers.slice(0,4)){
     try{
