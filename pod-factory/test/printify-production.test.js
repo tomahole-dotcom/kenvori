@@ -1,0 +1,3 @@
+import test from "node:test";import assert from "node:assert/strict";import {buildPrintifyDraftJob,printifyDraftGate} from "../src/printify-production.js";
+test("draft jobs are factory-shop only and never publish",()=>{const j=buildPrintifyDraftJob({candidateKey:"auto-0001"},{masterRef:"asset"},{blueprintId:1,providerId:2,variantIds:[3]});assert.equal(j.shopId,28992579);assert.equal(j.publish,false)});
+test("mockup gate fails closed",()=>{const g=printifyDraftGate({printifyProductId:"p"},{placementVerified:true,mockupVerified:false,variantCoverageVerified:true,actualCostKnown:true});assert.equal(g.ok,false);assert.ok(g.errors.includes("MOCKUP_UNVERIFIED"))});
