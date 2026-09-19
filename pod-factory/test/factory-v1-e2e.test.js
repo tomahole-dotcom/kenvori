@@ -1,0 +1,14 @@
+import test from "node:test";import assert from "node:assert/strict";
+import {factoryV1} from "../src/factory-orchestrator.js";import {createArtworkQueue,technicalArtworkGate} from "../src/artwork-engine.js";import {buildPrintifyDraftJob,printifyDraftGate} from "../src/printify-production.js";import {buildEtsyPackage,etsyPackageGate,finalFactoryGate} from "../src/listing-gate.js";
+test("Factory V1 end-to-end reaches safe publish gate",()=>{
+ const signals=[{source:"research",query:"original trend",audience:"buyers",theme:"original theme",searchInterest:92,growth:35,competition:20,priceMedian:32,reviewVelocity:80}];
+ const products=[{name:"poster",theme:"original theme",researchEvidence:85,designFit:90,marginPotential:80,priceCents:3200,productionCostCents:600,shippingCostCents:400,blueprintId:97,providerId:1,variantIds:[1]}];
+ const d=factoryV1({signals,productEvidence:products});assert.equal(d[0].status,"READY_FOR_ARTWORK");
+ const q=createArtworkQueue(d);assert.ok(q.length>0);
+ const asset={masterRef:"master",printifyImageId:"img",width:4000,height:5000,mockupBakedIn:false,ipHold:false,printAreaVerified:true};assert.equal(technicalArtworkGate(q[0],asset).ok,true);
+ const pj=buildPrintifyDraftJob(q[0],asset,{...products[0],printifyShopId:28992579});assert.equal(pj.publish,false);
+ assert.equal(printifyDraftGate({printifyProductId:"pid"},{placementVerified:true,mockupVerified:true,variantCoverageVerified:true,actualCostKnown:true}).ok,true);
+ const ep=buildEtsyPackage({candidateKey:d[0].candidateKey,title:"Original Product",description:"Original researched design.",tags:["original","gift"],taxonomyId:1,priceCents:3200,shippingProfileId:1,readinessProfileId:1});assert.equal(etsyPackageGate(ep).ok,true);
+ const g=finalFactoryGate({researchApproved:true,creativeApproved:true,productFitApproved:true,economicsApproved:true,artworkQaPass:true,printifyQaPass:true,ipGreen:true,etsyPackageReady:true,shippingVerified:true,productionPartnerVerified:true});
+ assert.equal(g.ready,true);assert.equal(g.status,"READY_AT_PUBLISH_GATE");assert.equal(g.publishAllowed,false);
+});
