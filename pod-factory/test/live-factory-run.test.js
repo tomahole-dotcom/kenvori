@@ -1,0 +1,2 @@
+import test from "node:test";import assert from "node:assert/strict";import {liveResearchCreativeBatch} from "../src/live-factory-run.js";
+test("live batch converts sourced research into creative candidates",()=>{const r=liveResearchCreativeBatch();assert.ok(r.length>0);assert.ok(r.every(x=>x.concepts.length>0));assert.ok(r.every(x=>x.status==="READY_FOR_PRODUCT_RESEARCH"));assert.ok(r.every(x=>x.opportunity.decision!=="REJECT"))});
