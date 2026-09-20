@@ -1,2 +1,2 @@
 import test from "node:test";import assert from "node:assert/strict";import {evaluateEconomics} from "../src/economics-engine.js";
-test("unknown production or shipping cost cannot pass",()=>{for(const x of [{priceCents:3000,shippingCostCents:500},{priceCents:3000,productionCostCents:700}]){const r=evaluateEconomics(x);assert.equal(r.approved,false);assert.equal(r.status,"ECONOMICS_INCOMPLETE");assert.ok(r.blockers.length)}});
+test("unknown production or shipping cost cannot produce a selling price",()=>{for(const x of [{shippingCostCents:500},{productionCostCents:700}]){const r=evaluateEconomics(x);assert.equal(r.approved,false);assert.equal(r.status,"PRICING_INCOMPLETE");assert.equal(r.priceCents,null);assert.ok(r.blockers.length)}});
