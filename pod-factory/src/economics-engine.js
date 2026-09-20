@@ -11,7 +11,7 @@ export function priceFromCosts(x={}){
 }
 export function evaluateEconomics(x={}){
  const priced=num(x.priceCents)===null?priceFromCosts(x):{priceCents:num(x.priceCents),status:"PRICE_SET",blockers:[]};
- if(priced.priceCents===null)return {grossCents:null,feesCents:null,profitCents:null,marginPct:null,approved:false,targetMet:false,status:priced.status,blockers:priced.blockers};
+ if(priced.priceCents===null)return {priceCents:null,grossCents:null,feesCents:null,profitCents:null,marginPct:null,approved:false,targetMet:false,status:priced.status,blockers:priced.blockers};
  const price=priced.priceCents,base=num(x.productionCostCents),ship=num(x.shippingCostCents),buyerShip=num(x.buyerShippingCents)??0;
  if(base===null||ship===null)return {grossCents:null,feesCents:null,profitCents:null,marginPct:null,approved:false,targetMet:false,status:"PRICING_INCOMPLETE",blockers:["COST_OR_SHIPPING_MISSING"]};
  const gross=price+buyerShip,etsyRate=(num(x.etsyRatePct)??10.5)/100,etsyFixed=num(x.etsyFixedCents)??25,listing=num(x.listingFeeCents)??20,optional=(num(x.optionalAdRatePct)??0)/100;
