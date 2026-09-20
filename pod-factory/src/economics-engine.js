@@ -18,4 +18,4 @@ export function evaluateEconomics(x={}){
  const fees=gross*(etsyRate+optional)+etsyFixed+listing,profit=gross-base-ship-fees,margin=gross?profit/gross*100:0,target=num(x.targetPct)??40;
  return {priceCents:price,grossCents:Math.round(gross),feesCents:Math.round(fees),profitCents:Math.round(profit),marginPct:Math.round(margin*100)/100,approved:true,targetMet:margin+0.01>=target,status:"PRICE_SET",blockers:[]};
 }
-export function rankEconomicProducts(xs=[]){return xs.map(x=>({...x,economics:evaluateEconomics(x)})).filter(x=>x.economics.priceCents!==null)}
+export function rankEconomicProducts(xs=[]){return xs.map(x=>({...x,economics:evaluateEconomics(x)}))}
