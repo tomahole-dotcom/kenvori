@@ -5,7 +5,7 @@ export function assembleProductionPlan({catalogEconomics=[]}={}){
   const themeHyp=hyp.filter(p=>p.theme===c.theme);
   const seededType=String(c.productType||"").trim();
   const candidates=(themeHyp.length?themeHyp:(seededType?[{name:seededType,theme:c.theme,researchEvidence:Math.max(50,Number(c.opportunity?.score)||0),designFit:80,marginPotential:65,status:"CATALOG_ECONOMICS_REQUIRED"}]:[])).map(p=>{const live=catalogEconomics.filter(x=>x.productType===p.name&&x.economics?.approved);const best=[...live].sort((a,b)=>b.economics.marginPct-a.economics.marginPct)[0];return best?{...p,...best,marginPotential:Math.min(100,best.economics.marginPct*2)}:p});
-  const matched=matchProducts(concept,candidates);const economic=rankEconomicProducts(matched.filter(x=>x.economics?.approved).map(x=>({...x,priceCents:x.priceCents,productionCostCents:x.productionCostCents??x.variant?.cost,shippingCostCents:x.shippingCostCents??x.shippingSelection?.costCents})));
+  const matched=matchProducts(concept,candidates);const economic=matched.filter(x=>x.economics?.approved).sort((a,b)=>b.economics.marginPct-a.economics.marginPct);
   for(const product of economic){
    const chain=lockArtworkChain({researchRef:c.rawRef||c.candidateKey,opportunityTheme:c.theme,creativeConcept:concept.conceptPrompt||concept.prompt,productType:product.productType||product.name,blueprintId:product.blueprintId,providerId:product.providerId,variantId:product.variantId||product.variant?.id,economics:product.economics,forbiddenThemes:["Norway","fjord","travel"]});
    if(!chain.approved)continue;const validation=validateArtworkRequest(chain,chain.artworkPrompt);if(!validation.ok)continue;
