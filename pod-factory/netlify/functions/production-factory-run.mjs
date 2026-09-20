@@ -1,12 +1,14 @@
 import {factoryRunSummary} from "../../src/production-runner.js";
 import {Printify} from "../../src/printify.js";
 import {FACTORY_PRINTIFY_SHOP_ID} from "../../src/shop-guard.js";
+import {buildCostProbe,readActualCost} from "../../src/cost-probe.js";
 
 const FAMILY_ALIASES={tshirt:"tshirt",sweatshirt:"sweatshirt",hoodie:"hoodie",mug:"mug","tote bag":"tote",poster:"poster",canvas:"canvas",ornament:"ornament","phone case":"phone_case",sticker:"sticker",notebook:"notebook",tumbler:"tumbler",pillow:"pillow",blanket:"blanket",hat:"hat"};
 const FAMILIES=[
  ["tshirt",/t-?shirt|jersey tee|cotton tee|crew tee/i],["sweatshirt",/sweatshirt|crewneck/i],["hoodie",/hoodie|hooded sweatshirt/i],["mug",/mug/i],["tote",/tote|shopping bag/i],["poster",/poster/i],["canvas",/\bcanvas\b/i],["ornament",/ornament/i],["phone_case",/phone case|slim phone|tough phone/i],["sticker",/sticker/i],["notebook",/notebook|journal/i],["tumbler",/tumbler|travel mug/i],["pillow",/pillow/i],["blanket",/blanket/i],["hat",/\bhat\b|\bcap\b|beanie/i]
 ];
 const HYPOTHESIS_TYPES=new Set(["phone case","tote bag","mug","notebook","poster","sweatshirt","pillow","blanket","sticker"]);
+const PROBE_IMAGE="6aada1a0579fd6933b75ef3f";
 function familyOf(b){const t=`${b.title||""} ${b.brand||""} ${b.model||""}`;return FAMILIES.find(([,rx])=>rx.test(t))?.[0]||null;}
 function productTypeForFamily(f){return Object.entries(FAMILY_ALIASES).find(([,v])=>v===f)?.[0]||f;}
 function pickVariant(v){const rows=Array.isArray(v?.variants)?v.variants:(Array.isArray(v)?v:[]);return rows.find(x=>x.is_enabled!==false)||rows[0]||null;}
@@ -24,8 +26,10 @@ export default async()=>{
    const providers=await api.printProviders(b.id);const provider=(Array.isArray(providers)?providers:[]).find(p=>p.id===99)||(Array.isArray(providers)?providers:[])[0];if(!provider)continue;
    const variants=await api.variants(b.id,provider.id),variant=pickVariant(variants);if(!variant)continue;
    const shipping=await api.shipping(b.id,provider.id),shippingCostCents=shippingCost(shipping,variant.id);
-   const productionCostCents=Number(variant.cost);
-   catalogEconomics.push({productType,blueprintId:b.id,blueprint:b.title,providerId:provider.id,provider:provider.title,variantId:variant.id,variant:variant.title||variant.options,productionCostCents:Number.isFinite(productionCostCents)?productionCostCents:null,shippingCostCents,evidence:"LIVE_PRINTIFY_CATALOG_2026-09-21"});
+   let productionCostCents=null,created=null;
+   const ph=variant?.placeholders?.[0]?.position;
+   if(ph){try{created=await api.createProduct(buildCostProbe({shopId:FACTORY_PRINTIFY_SHOP_ID,blueprintId:b.id,providerId:provider.id,variantId:variant.id,placeholder:ph,imageId:PROBE_IMAGE}));const fresh=await api.getProduct(created.id);productionCostCents=readActualCost(fresh,variant.id).costCents;await api.deleteProduct(created.id);created=null;}finally{if(created?.id){try{await api.deleteProduct(created.id)}catch{}}}}
+   catalogEconomics.push({productType,blueprintId:b.id,blueprint:b.title,providerId:provider.id,provider:provider.title,variantId:variant.id,variant:variant.title||variant.options,productionCostCents,shippingCostCents,evidence:"LIVE_PRINTIFY_CATALOG_COST_PROBE_2026-09-21"});
   }
   const factory=factoryRunSummary({catalogEconomics});
   return Response.json({ok:true,source:"LIVE_PRINTIFY_CATALOG",shopId:FACTORY_PRINTIFY_SHOP_ID,evaluated:catalogEconomics.length,safeMode:true,publishAuthorization:false,published:false,ordersTouched:false,catalogEconomics,...factory});
