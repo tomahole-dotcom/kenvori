@@ -2,15 +2,17 @@ const banned=["disney","marvel","star wars","pokemon","harry potter","nike","adi
 const modes=["illustrative editorial","surreal graphic","bold typographic","retro print","maximalist decorative","minimal art","character-free visual humor","folk-inspired geometric","collage-like abstract","playful pattern","premium monoline","unexpected object study"];
 const visualByTheme={
  "curated gallery wall":[
-  "an editorial still-life composition of overlapping abstract paper cutouts, sculptural ceramic forms and botanical silhouettes arranged as a sophisticated gallery-style focal piece; warm ivory ground, terracotta, muted cobalt and charcoal accents; no text, no scenery, no landmarks",
-  "a refined editorial composition of bold organic shapes, hand-drawn linework and small geometric forms arranged like a contemporary collected-art salon; tactile paper texture, warm neutral ground, restrained rust, ink blue and olive palette; no text, no scenery, no landmarks",
-  "an artful still life of asymmetric vessels, curved architectural forms and abstract foliage rendered as a modern editorial illustration; balanced negative space and subtle print texture; no text, no scenery, no landmarks"
+  "an impossible museum specimen: a porcelain teacup cracked open like a geode, revealing a tiny glowing midnight-blue star field inside; one delicate botanical sprig grows from the cosmic fracture while its shadow forms a perfect doorway; warm ivory ground, terracotta and cobalt accents; surreal focal object, no text, no scenery, no landmarks",
+  "a sculptural ceramic vase whose painted cobalt pattern physically peels away from the vessel as folded paper birds, leaving precise blank silhouettes behind; one terracotta circle becomes a rising sun only inside the vase's shadow; restrained ivory ground, editorial print texture; no text, no scenery, no landmarks",
+  "an elegant impossible still-life where three stacked ceramic vessels share one continuous botanical stem that passes through solid surfaces and changes from leaf to cut-paper to ink line at each boundary; bold negative space, ivory, terracotta, cobalt and charcoal; no text, no scenery, no landmarks"
  ],
  "nostalgic gallery prints":[
-  "a nostalgic editorial still life of vintage everyday objects, geometric shadows and tactile paper textures arranged as one cohesive art print; no brands, no text, no scenery or landmarks"
+  "an impossible archival object study: a vintage rotary telephone whose coiled cord transforms continuously into a hand-drawn maze and then into a blooming flower, composed as one graphic museum-catalogue specimen; faded cream, oxblood, ink blue; no brands, no text, no scenery",
+  "a surreal collection of familiar analog objects nested inside one another like impossible memory boxes: cassette shell, matchbook form and alarm-clock silhouette, with one continuous red thread connecting every layer; tactile retro print texture; no logos, no text, no scenery"
  ],
  "small everyday celebration":[
-  "a playful editorial arrangement of tiny celebratory everyday objects, abstract confetti shapes and expressive hand-drawn marks; no brands, no text"
+  "a deadpan visual celebration: an ordinary grocery receipt shape erupts into an extravagant paper-cut firework while a tiny coffee cup casts the shadow of a trophy; crisp editorial composition, playful scale contrast, no brands, no readable text",
+  "a tiny mundane desk object presented as a monumental award ceremony: bent paperclip on a velvet-like plinth with absurdly grand radiating cut-paper fanfare and confetti frozen into geometric orbit; visual humor through scale and juxtaposition; no text, no brands"
  ]
 };
 function visualConcept(theme,mode,seed){const set=visualByTheme[theme];if(set?.length)return set[Math.abs(Number(seed)||0)%set.length];return `a concrete ${mode} composition built only from original abstract forms, objects and visual motifs directly expressing ${theme}; no text, no brands, no unrelated scenery or locations`;}
