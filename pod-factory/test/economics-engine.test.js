@@ -1,3 +1,4 @@
-import test from "node:test";import assert from "node:assert/strict";import {evaluateEconomics,rankEconomicProducts} from "../src/economics-engine.js";
-test("economics fails closed below floor",()=>assert.equal(evaluateEconomics({priceCents:2000,productionCostCents:1000,shippingCostCents:700}).approved,false));
-test("economics ranks only viable products",()=>{const r=rankEconomicProducts([{name:"a",priceCents:3000,productionCostCents:500,shippingCostCents:300},{name:"b",priceCents:1500,productionCostCents:1000,shippingCostCents:500}]);assert.equal(r.length,1);assert.equal(r[0].name,"a")});
+import test from "node:test";import assert from "node:assert/strict";import {evaluateEconomics,priceFromCosts,rankEconomicProducts} from "../src/economics-engine.js";
+test("pricing derives selling price from production cost and shipping",()=>{const r=priceFromCosts({productionCostCents:1000,shippingCostCents:700,targetPct:40});assert.equal(r.status,"PRICE_SET");assert.ok(r.priceCents>1700)});
+test("economics does not reject a product; it sets price",()=>{const r=evaluateEconomics({productionCostCents:1000,shippingCostCents:500,targetPct:40});assert.equal(r.approved,true);assert.equal(r.status,"PRICE_SET");assert.ok(r.priceCents>1500)});
+test("pricing requires actual cost and shipping",()=>{const r=rankEconomicProducts([{name:"a",productionCostCents:500,shippingCostCents:300},{name:"b",productionCostCents:1000}]);assert.equal(r.length,1);assert.equal(r[0].name,"a")});
