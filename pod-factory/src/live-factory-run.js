@@ -6,5 +6,5 @@ export function evidenceForConcept(o={},c={}){
 }
 export function liveResearchCreativeBatch({seeds=MARKET_SEEDS_2026_09_19,limit=5}={}){
  const signals=seedsToSignals(seeds),ranked=rankOpportunities(mergeSignals(signals).map(deriveOpportunity)).filter(x=>x.opportunity.decision!=="REJECT").slice(0,limit);
- return ranked.map((o,i)=>{const candidateKey=`live-${String(i+1).padStart(4,"0")}`,raw=exploreConcepts({...o,candidateKey},8),concepts=selectConcepts(raw,c=>evidenceForConcept(o,c),3);return {candidateKey,query:o.query,theme:o.theme,audience:o.audience,opportunity:o.opportunity,evidence:o.evidence,concepts,status:concepts.length?"READY_FOR_PRODUCT_RESEARCH":"CREATIVE_HOLD"}});
+ return ranked.map((o,i)=>{const candidateKey=`live-${String(i+1).padStart(4,"0")}`,raw=exploreConcepts({...o,candidateKey},8),concepts=selectConcepts(raw,c=>evidenceForConcept(o,c),3);return {candidateKey,query:o.query,productType:o.productType,theme:o.theme,audience:o.audience,rawRef:o.sources?.[0]?.rawRef||null,opportunity:o.opportunity,evidence:o.evidence,concepts,status:concepts.length?"READY_FOR_PRODUCT_RESEARCH":"CREATIVE_HOLD"}});
 }
