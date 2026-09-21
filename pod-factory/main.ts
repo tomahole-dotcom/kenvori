@@ -12,9 +12,13 @@ Deno.serve(async (req) => {
     return json({ok:Object.values(present).every(Boolean),service:"kenvori-pod-factory",env:present});
   }
   if (url.pathname === "/etsy/complete-candidate-0002") {
+    if (req.method !== "POST" && !(req.method === "GET" && url.searchParams.get("execute") === "candidate-0002")) {
+      return json({ok:false,error:"POST only",publishAllowed:false},405);
+    }
     try {
       const {default: handler}=await import("./netlify/functions/etsy-complete-candidate-0002.mjs");
-      return await handler(req);
+      const executionRequest = req.method === "POST" ? req : new Request(req.url,{method:"POST",headers:req.headers});
+      return await handler(executionRequest);
     } catch (e) {
       console.error("candidate-0002 route failed", e);
       return json({
