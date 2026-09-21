@@ -18,7 +18,12 @@ Deno.serve(async (req) => {
     try {
       const {default: handler}=await import("./netlify/functions/etsy-complete-candidate-0002.mjs");
       const executionRequest = req.method === "POST" ? req : new Request(req.url,{method:"POST",headers:req.headers});
-      return await handler(executionRequest);
+      const response = await handler(executionRequest);
+      if (req.method === "GET" && response.status >= 400) {
+        const detail = await response.clone().json().catch(() => null);
+        return json({diagnostic:true,httpStatus:response.status,detail,publishAllowed:false,ordersTouched:false},200);
+      }
+      return response;
     } catch (e) {
       console.error("candidate-0002 route failed", e);
       return json({
