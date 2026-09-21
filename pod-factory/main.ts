@@ -1,6 +1,5 @@
 // Deno Deploy entrypoint for Kenvori POD Factory.
-// Compatibility shim lets existing safe Netlify-style functions read Deno env vars
-// while migration is completed without changing secrets or business logic.
+// Compatibility shim for existing Netlify-style environment reads.
 globalThis.Netlify ??= { env: { get: (name) => Deno.env.get(name) } };
 
 const json = (data, status=200) => Response.json(data,{status});
@@ -13,8 +12,19 @@ Deno.serve(async (req) => {
     return json({ok:Object.values(present).every(Boolean),service:"kenvori-pod-factory",env:present});
   }
   if (url.pathname === "/etsy/complete-candidate-0002") {
-    const {default: handler}=await import("./netlify/functions/etsy-complete-candidate-0002.mjs");
-    return handler(req);
+    try {
+      const {default: handler}=await import("./netlify/functions/etsy-complete-candidate-0002.mjs");
+      return await handler(req);
+    } catch (e) {
+      console.error("candidate-0002 route failed", e);
+      return json({
+        ok:false,
+        stage:"deno-route",
+        error:e instanceof Error ? e.message : String(e),
+        publishAllowed:false,
+        ordersTouched:false
+      },500);
+    }
   }
   return json({ok:true,service:"kenvori-pod-factory",safeMode:true,publishAllowed:false,routes:["/health","/etsy/complete-candidate-0002"]});
 });
