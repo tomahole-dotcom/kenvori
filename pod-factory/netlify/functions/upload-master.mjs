@@ -1,3 +1,5 @@
+
+const PHONE_CASE={shop:28992579,blueprint:268,provider:1,variant:63360,title:"KF-CANDIDATE-0002 — Whimsical Polka Dots Phone Case",assetUrl:"https://a62856d4-05af-4f1b-82d6-b6b6d2d1e5d8.sandbox.floot.app/_cdn/static/6151d3bb-a99f-4203-b3c5-29416eee51b5-kenvori-whimsical-polka-dots-phone-case-master.png"};
 export default async(req)=>{
  if(req.method!=="POST") return Response.json({ok:false,error:"POST only"},{status:405});
  const token=Netlify.env.get("PRINTIFY_API_TOKEN");
