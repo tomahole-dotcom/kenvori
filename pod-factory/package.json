@@ -1,8 +1,16 @@
 {
-  "name":"kenvori-pod-factory",
-  "private":true,
-  "type":"module",
-  "scripts":{"test":"node --test","catalog":"node src/catalog.js"},
-  "dependencies":{"postgres":"^3.4.7"},
-  "engines":{"node":">=20"}
+  "name": "kenvori-pod-factory",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "catalog": "node src/catalog.js",
+    "install": "deno install"
+  },
+  "dependencies": {
+    "postgres": "^3.4.7"
+  },
+  "engines": {
+    "node": ">=20"
+  }
 }
