@@ -1,8 +1,13 @@
 import { Printify } from "./printify.js";
+import { publishManifest } from "./publish-pipeline.js";
+
+const FACTORY_SHOP_ID=28992579;
 
 export async function createCandidate(spec, env = process.env) {
   validate(spec);
-  const api = new Printify(env.PRINTIFY_API_TOKEN, env.PRINTIFY_SHOP_ID);
+  const shopId=Number(env.PRINTIFY_SHOP_ID||FACTORY_SHOP_ID);
+  if(shopId!==FACTORY_SHOP_ID) throw new Error("Factory shop mismatch");
+  const api = new Printify(env.PRINTIFY_API_TOKEN, shopId);
 
   const uploaded = await api.uploadFromUrl(spec.fileName, spec.artworkUrl);
 
@@ -31,12 +36,30 @@ export async function createCandidate(spec, env = process.env) {
     }]
   });
 
-  // Safety gate: never publish by accident.
-  if (env.POD_LIVE_PUBLISH === "true" && spec.approvedForPublish === true) {
-    await api.publish(product.id);
-    return { status: "PUBLISH_REQUESTED", product };
-  }
-  return { status: "PRINTIFY_CREATED_SAFE_MODE", product };
+  // Safe mode is the only creation path. Channel publication is a separate,
+  // explicitly-authorized step through publishManifest(), which publishes
+  // Printify -> Etsy and therefore preserves automatic fulfillment routing.
+  return { status: "PRINTIFY_CREATED_SAFE_MODE", product, publishAllowed:false, channelFlow:"PRINTIFY_TO_ETSY" };
+}
+
+export async function publishCandidate(spec, env=process.env){
+  if(spec.approvedForPublish!==true) return {ok:false,publishCalled:false,reason:"PUBLISH_NOT_AUTHORIZED"};
+  return publishManifest({
+    candidateKey:spec.candidateKey,
+    printifyProductId:spec.printifyProductId,
+    printifyShopId:Number(env.PRINTIFY_SHOP_ID||FACTORY_SHOP_ID),
+    expectedTitle:spec.expectedTitle,
+    expectedTags:spec.expectedTags,
+    expectedPriceCents:spec.expectedPriceCents,
+    expectedTaxonomyId:spec.expectedTaxonomyId,
+    oldListingIds:spec.oldListingIds||[],
+    qaPass:spec.qaPass,
+    ipGreen:spec.ipGreen,
+    economicsApproved:spec.economicsApproved,
+    publishAuthorization:true,
+    etsyListingPrecreated:false,
+    requiresManualVariantMigration:false
+  });
 }
 
 function validate(s) {
