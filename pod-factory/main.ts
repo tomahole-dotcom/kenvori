@@ -19,10 +19,10 @@ Deno.serve(async (req) => {
       const blueprints=await bRes.json();
       const mugs=(Array.isArray(blueprints)?blueprints:[]).filter(b=>/mug/i.test(String(b.title||""))).map(b=>({id:b.id,title:b.title,brand:b.brand,model:b.model})).slice(0,30);
       const results=[];
-      for(const b of mugs){
+      for(const b of mugs.slice(0,12)){
         const pRes=await fetch(`https://api.printify.com/v1/catalog/blueprints/${b.id}/print_providers.json`,{headers:h});
         const providers=await pRes.json();
-        for(const p of (Array.isArray(providers)?providers:[]).slice(0,8)){
+        for(const p of (Array.isArray(providers)?providers:[]).slice(0,4)){
           const [vRes,sRes]=await Promise.all([
             fetch(`https://api.printify.com/v1/catalog/blueprints/${b.id}/print_providers/${p.id}/variants.json`,{headers:h}),
             fetch(`https://api.printify.com/v1/catalog/blueprints/${b.id}/print_providers/${p.id}/shipping.json`,{headers:h})
