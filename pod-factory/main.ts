@@ -11,6 +11,18 @@ Deno.serve(async (req) => {
     const present=Object.fromEntries(required.map(k=>[k,Boolean(Deno.env.get(k))]));
     return json({ok:Object.values(present).every(Boolean),service:"kenvori-pod-factory",env:present});
   }
+  if (url.pathname === "/qa/candidate-0002-routing") {
+    try {
+      const token=Deno.env.get("PRINTIFY_API_TOKEN");
+      const h={Authorization:`Bearer ${token}`,"User-Agent":"Kenvori-POD-Factory"};
+      const shopsRes=await fetch("https://api.printify.com/v1/shops.json",{headers:h});
+      const shops=await shopsRes.json();
+      const shop=Array.isArray(shops)?shops.find(s=>Number(s.id)===28992579):null;
+      const pr=await fetch("https://api.printify.com/v1/shops/28992579/products/6ab0dfb533dcede08c071937.json",{headers:h});
+      const p=await pr.json();
+      return json({ok:shopsRes.ok&&pr.ok,shop:shop?{id:shop.id,title:shop.title,salesChannel:shop.sales_channel}:null,product:{id:p.id,title:p.title,external:p.external??null,visible:p.visible??null,isLocked:p.is_locked??null,enabledVariants:(p.variants||[]).filter(v=>v.is_enabled).length},expectedEtsyListingId:"4579711218",routingLinked:Boolean(p.external?.id)&&String(p.external.id)==="4579711218",publishAllowed:false,ordersTouched:false});
+    } catch(e) { return json({ok:false,error:String(e?.message||e),publishAllowed:false,ordersTouched:false},500); }
+  }
   if (url.pathname === "/etsy/fix-candidate-0002-description" && url.searchParams.get("execute") === "candidate-0002-description") {
     try {
       const {etsyAccessToken}=await import("./src/token-store.js");
