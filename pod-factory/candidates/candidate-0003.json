@@ -30,5 +30,60 @@
   "nextGate": "LIVE_PRINTIFY_PRODUCT_COST_SHIPPING",
   "publishAuthorization": false,
   "etsyPrecreateAllowed": false,
-  "channelFlow": "PRINTIFY_TO_ETSY"
+  "channelFlow": "PRINTIFY_TO_ETSY",
+  "commercialOpportunity": {
+    "status": "APPROVED",
+    "researchDate": "2026-09-22",
+    "evergreenDemand": true,
+    "currentTrend": {
+      "theme": "Play Haus / joyful maximalism",
+      "evidence": "Etsy Fall/Winter trend data identifies color-drenched, whimsical, dopamine-bright products and specifically colorful ceramics as an inventory opportunity.",
+      "signals": [
+        "colorful accessories +3000%",
+        "dopamine items +40%",
+        "maximalist prints tripled"
+      ]
+    },
+    "q4Timing": {
+      "activeWindow": true,
+      "reason": "Etsy's 2026 Festive Season guidance is already live in September; holiday shoppers are entering gift discovery and Etsy recommends sharpening keywords, photos, descriptions and delivery profiles now.",
+      "occasions": [
+        "Halloween",
+        "Thanksgiving/hostess gifting",
+        "Black Friday/Cyber Week",
+        "Christmas gifting",
+        "New Year/self-gifting"
+      ]
+    },
+    "giftIntents": [
+      "gift for her",
+      "coworker gift",
+      "friend gift",
+      "self-care gift",
+      "stocking/under-tree add-on"
+    ],
+    "strategy": "Keep Candidate 0003 evergreen; use Q4 gifting intent in listing and merchandising rather than making the artwork Christmas-only.",
+    "salesGoal": "Maximize qualified search visibility, thumbnail CTR and gift conversion without copying competitor artwork or text."
+  },
+  "listingIntelligence": {
+    "status": "RESEARCH_IN_PROGRESS",
+    "market": "Etsy",
+    "rules": {
+      "searchAndConversion": true,
+      "competitorPatternLearning": true,
+      "copyCompetitorText": false,
+      "copyCompetitorArtwork": false,
+      "ownKenvoriDataOverridesMarketHeuristics": true
+    },
+    "requiredBeforeMetadataLock": [
+      "keyword clusters",
+      "buyer intent",
+      "recipient/gift angles",
+      "title structure",
+      "13-tag plan",
+      "thumbnail/mockup plan",
+      "description conversion structure",
+      "price/friction review"
+    ]
+  }
 }
