@@ -11,6 +11,27 @@ Deno.serve(async (req) => {
     const present=Object.fromEntries(required.map(k=>[k,Boolean(Deno.env.get(k))]));
     return json({ok:Object.values(present).every(Boolean),service:"kenvori-pod-factory",env:present});
   }
+  if (url.pathname === "/etsy/fix-candidate-0002-description" && url.searchParams.get("execute") === "candidate-0002-description") {
+    try {
+      const {etsyAccessToken}=await import("./src/token-store.js");
+      const token=await etsyAccessToken(), key=Deno.env.get("ETSY_API_KEY"), secret=Deno.env.get("ETSY_SHARED_SECRET");
+      const headers={Authorization:`Bearer ${token}`,"x-api-key":`${key}:${secret}`};
+      const base="https://openapi.etsy.com/v3/application";
+      const beforeRes=await fetch(base+"/listings/4579711218",{headers});
+      const before=await beforeRes.json();
+      if(!beforeRes.ok||before.state!=="draft") return json({ok:false,stage:"draft-guard",state:before.state??null,publishAllowed:false,ordersTouched:false},409);
+      const oldText="original glossy polka-dot pattern";
+      const newText="original colorful polka-dot pattern";
+      if(!String(before.description||"").includes(oldText)) return json({ok:false,stage:"description-guard",publishAllowed:false,ordersTouched:false},409);
+      const description=String(before.description).replace(oldText,newText);
+      const body=new URLSearchParams({description});
+      const wr=await fetch(base+"/shops/67619195/listings/4579711218",{method:"PATCH",headers:{...headers,"Content-Type":"application/x-www-form-urlencoded"},body});
+      const wd=await wr.json().catch(()=>null);
+      if(!wr.ok) return json({ok:false,stage:"description-write",status:wr.status,error:wd,publishAllowed:false,ordersTouched:false},wr.status);
+      const vr=await fetch(base+"/listings/4579711218",{headers}); const v=await vr.json();
+      return json({ok:vr.ok&&v.state==="draft"&&String(v.description||"").includes(newText)&&!String(v.description||"").includes(oldText),state:v.state,descriptionCorrected:true,publishAllowed:false,ordersTouched:false},vr.ok?200:vr.status);
+    } catch(e) { return json({ok:false,error:String(e?.message||e),publishAllowed:false,ordersTouched:false},500); }
+  }
   if (url.pathname === "/qa/candidate-0002") {
     try {
       const {etsyAccessToken}=await import("./src/token-store.js");
