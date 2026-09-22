@@ -27,7 +27,7 @@
     ],
     "goal": "distinctive original Kenvori artwork with strong thumbnail readability and wraparound mug continuity"
   },
-  "nextGate": "LISTING_INTELLIGENCE_AND_PRICE_LOCK",
+  "nextGate": "READY_FOR_PUBLICATION_AUTHORIZATION",
   "publishAuthorization": false,
   "etsyPrecreateAllowed": false,
   "channelFlow": "PRINTIFY_TO_ETSY",
@@ -66,25 +66,41 @@
     "salesGoal": "Maximize qualified search visibility, thumbnail CTR and gift conversion without copying competitor artwork or text."
   },
   "listingIntelligence": {
-    "status": "RESEARCH_IN_PROGRESS",
-    "market": "Etsy",
-    "rules": {
-      "searchAndConversion": true,
-      "competitorPatternLearning": true,
-      "copyCompetitorText": false,
-      "copyCompetitorArtwork": false,
-      "ownKenvoriDataOverridesMarketHeuristics": true
-    },
-    "requiredBeforeMetadataLock": [
-      "keyword clusters",
-      "buyer intent",
-      "recipient/gift angles",
-      "title structure",
-      "13-tag plan",
-      "thumbnail/mockup plan",
-      "description conversion structure",
-      "price/friction review"
-    ]
+    "status": "APPROVED",
+    "evidenceCount": 30,
+    "tractionEvidence": [
+      {
+        "listingId": 1407115270,
+        "rating": 4.93,
+        "ratingCount": 10804
+      },
+      {
+        "listingId": 4399062342,
+        "rating": 4.87,
+        "ratingCount": 1275
+      },
+      {
+        "listingId": 4571118132,
+        "rating": 4.9,
+        "ratingCount": 209
+      },
+      {
+        "listingId": 4514955342,
+        "rating": 4.77,
+        "ratingCount": 118
+      }
+    ],
+    "observedIntents": [
+      "positive affirmation mug",
+      "motivational mug",
+      "floral mug",
+      "self care gift",
+      "gift for her",
+      "daily reminder",
+      "inspirational coffee mug"
+    ],
+    "copyCompetitorText": false,
+    "copyCompetitorArtwork": false
   },
   "productLock": {
     "status": "LOCKED",
@@ -97,7 +113,7 @@
     "reason": "Uses proven Kenvori live mug configuration and preserves a clean white canvas for the locked colorful maximalist concept."
   },
   "economics": {
-    "status": "READY",
+    "status": "PRICE_SET",
     "currency": "USD",
     "productionCostCents": 644,
     "shippingMarket": "US",
@@ -105,7 +121,13 @@
     "costBasisCents": 1313,
     "pricingRule": "ACTUAL_COST_PLUS_SHIPPING_TO_SALE_PRICE",
     "marginSelectionGate": false,
-    "referenceExistingKenvoriPriceCents": 2499
+    "referenceExistingKenvoriPriceCents": 2499,
+    "salePriceCents": 2744,
+    "targetPct": 40,
+    "etsyRatePct": 10.5,
+    "etsyFixedCents": 25,
+    "listingFeeCents": 20,
+    "calculation": "ceil((644+669+25+20)/(1-0.40-0.105)) = 2744"
   },
   "artwork": {
     "status": "QA_APPROVED_SOURCE",
@@ -163,5 +185,26 @@
       "thumbnailReadability": true
     },
     "notes": "Actual Printify mockup visually inspected. Main message is centered and highly legible; sun, floral framing and cat render cleanly. Side wrap artwork naturally continues beyond the front camera view. No blocking placement defect found."
+  },
+  "etsyPackage": {
+    "status": "SALE_READY_METADATA",
+    "title": "Good Things Take Time Mug, Positive Affirmation Mug, Floral Self Care Gift, Inspirational Coffee Cup, Gift for Her",
+    "priceCents": 2744,
+    "tags": [
+      "affirmation mug",
+      "positive quote mug",
+      "floral mug",
+      "self care gift",
+      "gift for her",
+      "motivational mug",
+      "inspirational mug",
+      "daily reminder mug",
+      "cute coffee mug",
+      "colorful mug",
+      "wellness gift",
+      "friend gift",
+      "coworker gift"
+    ],
+    "description": "A cheerful daily reminder for slow mornings, busy desks and everything in between. This original Kenvori 11 oz ceramic mug features the uplifting phrase “Good Things Take Time” surrounded by colorful folk-inspired flowers, a smiling sun and a relaxed little cat.\\n\\nDesigned as an everyday encouragement mug and an easy-to-give gift for a friend, coworker, sister or anyone who could use a brighter moment. The wraparound artwork keeps the mug colorful from more than one angle while the main message stays clear and readable from the front.\\n\\nDETAILS\\n• 11 oz white ceramic mug\\n• Full-color wraparound design\\n• Original Kenvori artwork\\n• Made to order by our production partner\\n• Suitable for coffee, tea and everyday hot drinks\\n\\nGIFT IDEAS\\nBirthday • encouragement • self-care • coworker • friendship • Christmas • just because\\n\\nPlease note that colors can vary slightly between screens and the finished printed product."
   }
 }
