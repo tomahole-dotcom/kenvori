@@ -32,6 +32,6 @@ export async function publishManifest(m={}){
  if(before.id!==m.printifyProductId)return {ok:false,stage:"PREFLIGHT",reason:"PRODUCT_MISMATCH",publishCalled:false};
  if(before.external?.id)return {ok:false,stage:"PREFLIGHT",reason:"ALREADY_CHANNEL_LINKED",publishCalled:false,external:before.external};
  const publishResult=await p.publish(m.printifyProductId);
- const reconciliation=await reconcilePublishedProduct({candidateKey:m.candidateKey,expectedTitle:m.expectedTitle,expectedTags:m.expectedTags,expectedPriceCents:m.expectedPriceCents,expectedTaxonomyId:m.expectedTaxonomyId,oldListingIds:m.oldListingIds||[],attempts:m.reconcileAttempts||6,delayMs:m.reconcileDelayMs||5000});
+ const reconciliation=await reconcilePublishedProduct({candidateKey:m.candidateKey,printifyProductId:m.printifyProductId,expectedTitle:m.expectedTitle,expectedTags:m.expectedTags,expectedPriceCents:m.expectedPriceCents,expectedTaxonomyId:m.expectedTaxonomyId,oldListingIds:m.oldListingIds||[],attempts:m.reconcileAttempts||6,delayMs:m.reconcileDelayMs||5000});
  return {ok:reconciliation.ok,publishCalled:true,flow:"PRINTIFY_TO_ETSY",printifyProductId:m.printifyProductId,publishResult,reconciliation,ordersTouched:false};
 }
