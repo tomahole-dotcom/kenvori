@@ -27,7 +27,7 @@
     ],
     "goal": "distinctive original Kenvori artwork with strong thumbnail readability and wraparound mug continuity"
   },
-  "nextGate": "FINAL_ARTWORK_PRODUCTION",
+  "nextGate": "PRINTIFY_EXACT_GEOMETRY_AND_DRAFT",
   "publishAuthorization": false,
   "etsyPrecreateAllowed": false,
   "channelFlow": "PRINTIFY_TO_ETSY",
@@ -106,5 +106,19 @@
     "pricingRule": "ACTUAL_COST_PLUS_SHIPPING_TO_SALE_PRICE",
     "marginSelectionGate": false,
     "referenceExistingKenvoriPriceCents": 2499
+  },
+  "artwork": {
+    "status": "QA_APPROVED_SOURCE",
+    "genId": "3689b4bd-bc9a-45c1-a2b2-e78578c5a15e",
+    "sourceFile": "a_wide_rectangular_colorful_flat_vector_illustr.png",
+    "qa": {
+      "flatArtworkOnly": true,
+      "noMockup": true,
+      "noPresentationBoard": true,
+      "wideWrapComposition": true,
+      "textLegible": true,
+      "visualContinuity": true,
+      "notes": "Approved as source artwork; must be fit to exact Printify blueprint 68 print-area geometry without stretching before upload."
+    }
   }
 }
