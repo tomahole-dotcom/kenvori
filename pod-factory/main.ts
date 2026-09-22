@@ -11,6 +11,16 @@ Deno.serve(async (req) => {
     const present=Object.fromEntries(required.map(k=>[k,Boolean(Deno.env.get(k))]));
     return json({ok:Object.values(present).every(Boolean),service:"kenvori-pod-factory",env:present});
   }
+  if (url.pathname === "/qa/candidate-0003-geometry") {
+    try {
+      const token=Deno.env.get("PRINTIFY_API_TOKEN");
+      const h={Authorization:`Bearer ${token}`,"User-Agent":"Kenvori-POD-Factory"};
+      const r=await fetch("https://api.printify.com/v1/shops/28992579/products/6aad9f6ec1ac4a4c9a041f54.json",{headers:h});
+      const p=await r.json();
+      const areas=(p.print_areas||[]).map(a=>({variantIds:a.variant_ids,placeholders:(a.placeholders||[]).map(x=>({position:x.position,images:(x.images||[]).map(i=>({id:i.id,x:i.x,y:i.y,scale:i.scale,angle:i.angle}))}))}));
+      return json({ok:r.ok,candidateKey:"candidate-0003",blueprintId:p.blueprint_id,providerId:p.print_provider_id,printAreas:areas,publishAllowed:false,ordersTouched:false});
+    } catch(e){return json({ok:false,error:String(e?.message||e),publishAllowed:false,ordersTouched:false},500)}
+  }
   if (url.pathname === "/qa/candidate-0003-economics") {
     try {
       const token=Deno.env.get("PRINTIFY_API_TOKEN");
