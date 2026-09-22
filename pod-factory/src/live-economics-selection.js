@@ -8,10 +8,11 @@ export function shippingCostForVariant(shipping={},variantId,country="US"){
 }
 export function selectLiveEconomics(matches=[],pricing={}){
  const out=[];
- for(const m of matches){for(const v of m.variants||[]){const productionCostCents=n(v.cost),ship=shippingCostForVariant(m.shipping,v.id,pricing.country||"US"),priceCents=n(pricing[m.productType]?.priceCents);
-  const economics=evaluateEconomics({priceCents,productionCostCents,shippingCostCents:ship?.costCents,buyerShippingCents:n(pricing[m.productType]?.buyerShippingCents)??0,optionalAdRatePct:n(pricing.optionalAdRatePct)??0});
-  out.push({...m,variant:v,priceCents,shippingSelection:ship,economics});
+ for(const m of matches){for(const v of m.variants||[]){const productionCostCents=n(v.cost),ship=shippingCostForVariant(m.shipping,v.id,pricing.country||"US"),configured=n(pricing[m.productType]?.priceCents);
+  const economics=evaluateEconomics({priceCents:configured,productionCostCents,shippingCostCents:ship?.costCents,buyerShippingCents:n(pricing[m.productType]?.buyerShippingCents)??0,optionalAdRatePct:n(pricing.optionalAdRatePct)??0});
+  out.push({...m,variant:v,priceCents:economics.priceCents,shippingSelection:ship,economics});
  }}
- return out.sort((a,b)=>(b.economics.marginPct??-999)-(a.economics.marginPct??-999));
+ // Preserve product/research order. Economics reports and prices; it never ranks products.
+ return out;
 }
 export function approvedLiveEconomics(matches=[],pricing={}){return selectLiveEconomics(matches,pricing).filter(x=>x.economics.approved)}
