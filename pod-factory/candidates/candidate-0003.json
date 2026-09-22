@@ -27,7 +27,7 @@
     ],
     "goal": "distinctive original Kenvori artwork with strong thumbnail readability and wraparound mug continuity"
   },
-  "nextGate": "PRINTIFY_EXACT_GEOMETRY_AND_DRAFT",
+  "nextGate": "PRINTIFY_MOCKUP_PLACEMENT_QA",
   "publishAuthorization": false,
   "etsyPrecreateAllowed": false,
   "channelFlow": "PRINTIFY_TO_ETSY",
@@ -120,5 +120,19 @@
       "visualContinuity": true,
       "notes": "Approved as source artwork; must be fit to exact Printify blueprint 68 print-area geometry without stretching before upload."
     }
+  },
+  "printifyDraft": {
+    "status": "CREATED",
+    "shopId": 28992579,
+    "productId": "6ab28f87d8d6ff7189080c88",
+    "uploadId": "6ab28f8528f2d703ae5d09cd",
+    "blueprintId": 68,
+    "providerId": 1,
+    "variantId": 33719,
+    "enabledVariants": 1,
+    "imageCount": 6,
+    "external": null,
+    "published": false,
+    "ordersTouched": false
   }
 }
