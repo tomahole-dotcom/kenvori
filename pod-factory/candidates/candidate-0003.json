@@ -27,7 +27,7 @@
     ],
     "goal": "distinctive original Kenvori artwork with strong thumbnail readability and wraparound mug continuity"
   },
-  "nextGate": "LISTING_INTELLIGENCE_AND_METADATA",
+  "nextGate": "LISTING_INTELLIGENCE_AND_PRICE_LOCK",
   "publishAuthorization": false,
   "etsyPrecreateAllowed": false,
   "channelFlow": "PRINTIFY_TO_ETSY",
@@ -148,5 +148,20 @@
       "wrapContinuesAtSides": true
     },
     "notes": "Rendered Printify mug mockup shows centered Good Things Take Time composition, sun/cat/floral elements intact, strong front readability and no problematic crop. Continue to listing intelligence and metadata; publication remains locked."
+  },
+  "mockupQa": {
+    "status": "APPROVED",
+    "source": "PRINTIFY_ACTUAL_FRONT_MOCKUP",
+    "asset": "candidate-0003-printify-front-mockup.jpg",
+    "dimensions": "1200x1200",
+    "checks": {
+      "mainMessageReadable": true,
+      "centralComposition": true,
+      "verticalPlacementGood": true,
+      "majorCropping": false,
+      "artworkFollowsMugCurvature": true,
+      "thumbnailReadability": true
+    },
+    "notes": "Actual Printify mockup visually inspected. Main message is centered and highly legible; sun, floral framing and cat render cleanly. Side wrap artwork naturally continues beyond the front camera view. No blocking placement defect found."
   }
 }
