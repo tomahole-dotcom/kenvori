@@ -11,6 +11,26 @@ Deno.serve(async (req) => {
     const present=Object.fromEntries(required.map(k=>[k,Boolean(Deno.env.get(k))]));
     return json({ok:Object.values(present).every(Boolean),service:"kenvori-pod-factory",env:present});
   }
+  if (url.pathname === "/etsy/publish-candidate-0002" && url.searchParams.get("execute") === "publish-candidate-0002") {
+    try {
+      const {etsyAccessToken}=await import("./src/token-store.js");
+      const token=await etsyAccessToken(), key=Deno.env.get("ETSY_API_KEY"), secret=Deno.env.get("ETSY_SHARED_SECRET");
+      const headers={Authorization:`Bearer ${token}`,"x-api-key":`${key}:${secret}`};
+      const base="https://openapi.etsy.com/v3/application";
+      const lr=await fetch(base+"/listings/4579711218",{headers}); const l=await lr.json();
+      if(!lr.ok||l.state!=="draft") return json({ok:false,stage:"draft-guard",state:l.state??null,publishAllowed:true,ordersTouched:false},409);
+      const ir=await fetch(base+"/listings/4579711218/inventory",{headers}); const inv=await ir.json();
+      const enabled=(inv.products||[]).filter(p=>p.offerings?.some(o=>o.is_enabled!==false));
+      if(Number(l.shop_section_id)!==60488549||Number(l.shipping_profile_id)!==316064704230||(l.tags||[]).length!==13||(l.images?.length??3)<1||enabled.length!==26)
+        return json({ok:false,stage:"prepublish-guard",sectionId:l.shop_section_id,shippingProfileId:l.shipping_profile_id,tags:(l.tags||[]).length,variants:enabled.length,publishAllowed:true,ordersTouched:false},409);
+      const body=new URLSearchParams({state:"active"});
+      const wr=await fetch(base+"/shops/67619195/listings/4579711218",{method:"PATCH",headers:{...headers,"Content-Type":"application/x-www-form-urlencoded"},body});
+      const wd=await wr.json().catch(()=>null);
+      if(!wr.ok) return json({ok:false,stage:"publish",status:wr.status,error:wd,publishAllowed:true,ordersTouched:false},wr.status);
+      const vr=await fetch(base+"/listings/4579711218",{headers}); const v=await vr.json();
+      return json({ok:vr.ok&&v.state==="active",listingId:4579711218,state:v.state,sectionId:v.shop_section_id,shippingProfileId:v.shipping_profile_id,publishAuthorized:true,ordersTouched:false},vr.ok?200:vr.status);
+    } catch(e) { return json({ok:false,error:String(e?.message||e),publishAuthorized:true,ordersTouched:false},500); }
+  }
   if (url.pathname === "/qa/candidate-0002-routing") {
     try {
       const token=Deno.env.get("PRINTIFY_API_TOKEN");
