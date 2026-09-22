@@ -27,7 +27,7 @@
     ],
     "goal": "distinctive original Kenvori artwork with strong thumbnail readability and wraparound mug continuity"
   },
-  "nextGate": "LIVE_PRINTIFY_PRODUCT_COST_SHIPPING",
+  "nextGate": "FINAL_ARTWORK_PRODUCTION",
   "publishAuthorization": false,
   "etsyPrecreateAllowed": false,
   "channelFlow": "PRINTIFY_TO_ETSY",
@@ -85,5 +85,26 @@
       "description conversion structure",
       "price/friction review"
     ]
+  },
+  "productLock": {
+    "status": "LOCKED",
+    "blueprintId": 68,
+    "blueprint": "Mug 11oz",
+    "providerId": 1,
+    "provider": "SPOKE Custom Products",
+    "variantId": 33719,
+    "variant": "11oz",
+    "reason": "Uses proven Kenvori live mug configuration and preserves a clean white canvas for the locked colorful maximalist concept."
+  },
+  "economics": {
+    "status": "READY",
+    "currency": "USD",
+    "productionCostCents": 644,
+    "shippingMarket": "US",
+    "shippingFirstItemCents": 669,
+    "costBasisCents": 1313,
+    "pricingRule": "ACTUAL_COST_PLUS_SHIPPING_TO_SALE_PRICE",
+    "marginSelectionGate": false,
+    "referenceExistingKenvoriPriceCents": 2499
   }
 }
