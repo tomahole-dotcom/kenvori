@@ -11,6 +11,30 @@ Deno.serve(async (req) => {
     const present=Object.fromEntries(required.map(k=>[k,Boolean(Deno.env.get(k))]));
     return json({ok:Object.values(present).every(Boolean),service:"kenvori-pod-factory",env:present});
   }
+  if (url.pathname === "/qa/candidate-0003-economics") {
+    try {
+      const token=Deno.env.get("PRINTIFY_API_TOKEN");
+      const h={Authorization:`Bearer ${token}`,"User-Agent":"Kenvori-POD-Factory"};
+      const bRes=await fetch("https://api.printify.com/v1/catalog/blueprints.json",{headers:h});
+      const blueprints=await bRes.json();
+      const mugs=(Array.isArray(blueprints)?blueprints:[]).filter(b=>/mug/i.test(String(b.title||""))).map(b=>({id:b.id,title:b.title,brand:b.brand,model:b.model})).slice(0,30);
+      const results=[];
+      for(const b of mugs){
+        const pRes=await fetch(`https://api.printify.com/v1/catalog/blueprints/${b.id}/print_providers.json`,{headers:h});
+        const providers=await pRes.json();
+        for(const p of (Array.isArray(providers)?providers:[]).slice(0,8)){
+          const [vRes,sRes]=await Promise.all([
+            fetch(`https://api.printify.com/v1/catalog/blueprints/${b.id}/print_providers/${p.id}/variants.json`,{headers:h}),
+            fetch(`https://api.printify.com/v1/catalog/blueprints/${b.id}/print_providers/${p.id}/shipping.json`,{headers:h})
+          ]);
+          const vd=await vRes.json().catch(()=>null), sd=await sRes.json().catch(()=>null);
+          const variants=(vd?.variants||[]).filter(v=>v.is_enabled!==false).map(v=>({id:v.id,title:v.title,cost:v.cost,is_enabled:v.is_enabled})).filter(v=>/11\s*oz|11oz|330\s*ml/i.test(v.title)).slice(0,10);
+          if(variants.length)results.push({blueprint:b,provider:{id:p.id,title:p.title},variants,shipping:sd});
+        }
+      }
+      return json({ok:bRes.ok,candidateKey:"candidate-0003",researchLocked:true,results,publishAllowed:false,ordersTouched:false});
+    } catch(e){return json({ok:false,error:String(e?.message||e),publishAllowed:false,ordersTouched:false},500)}
+  }
   if (url.pathname === "/etsy/publish-candidate-0002" && url.searchParams.get("execute") === "publish-candidate-0002") {
     try {
       const {etsyAccessToken}=await import("./src/token-store.js");
