@@ -32,7 +32,10 @@ Deno.serve(async (req) => {
           if(variants.length)results.push({blueprint:b,provider:{id:p.id,title:p.title},variants,shipping:sd});
         }
       }
-      return json({ok:bRes.ok,candidateKey:"candidate-0003",researchLocked:true,results,publishAllowed:false,ordersTouched:false});
+      const existingRes=await fetch("https://api.printify.com/v1/shops/28992579/products/6aad9f6ec1ac4a4c9a041f54.json",{headers:h});
+      const existing=await existingRes.json().catch(()=>null);
+      const provenMug=existingRes.ok?{productId:existing.id,blueprintId:existing.blueprint_id,providerId:existing.print_provider_id,variants:(existing.variants||[]).filter(v=>v.is_enabled).map(v=>({id:v.id,title:v.title,cost:v.cost,price:v.price})),external:existing.external??null}:null;
+      return json({ok:bRes.ok&&existingRes.ok,candidateKey:"candidate-0003",researchLocked:true,provenMug,results,publishAllowed:false,ordersTouched:false});
     } catch(e){return json({ok:false,error:String(e?.message||e),publishAllowed:false,ordersTouched:false},500)}
   }
   if (url.pathname === "/etsy/publish-candidate-0002" && url.searchParams.get("execute") === "publish-candidate-0002") {
