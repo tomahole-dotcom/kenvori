@@ -1,0 +1,34 @@
+{
+  "candidateKey": "candidate-0003",
+  "status": "RESEARCH_LOCKED",
+  "market": "Etsy",
+  "researchDate": "2026-09-22",
+  "opportunity": {
+    "theme": "whimsical colorful maximalism",
+    "evidence": [
+      "Etsy 2026 World of Whimsy: playful self-expression remains a documented marketplace trend",
+      "Etsy 2026 trend data: colorful accessories +3000%, maximalist prints tripled in prior fall/winter report",
+      "Live Etsy search 2026-09-22 shows active whimsical/maximalist mug competition across abstract, floral, folk-art, fruit and character motifs"
+    ]
+  },
+  "productDirection": {
+    "type": "mug",
+    "reason": "Different product surface from Candidate 0002 while preserving a validated playful/colorful demand signal; suitable for an original all-over graphic without personalization.",
+    "personalized": false
+  },
+  "creativeLock": {
+    "concept": "Original playful maximalist mug built around irregular hand-drawn micro-shapes and expressive color rhythm; cheerful, collectible and intentionally imperfect rather than generic clip-art.",
+    "avoid": [
+      "polka-dot repeat from Candidate 0002",
+      "copyrighted characters or brands",
+      "generic AI-style floral collage",
+      "copying competitor motifs or compositions",
+      "personalization"
+    ],
+    "goal": "distinctive original Kenvori artwork with strong thumbnail readability and wraparound mug continuity"
+  },
+  "nextGate": "LIVE_PRINTIFY_PRODUCT_COST_SHIPPING",
+  "publishAuthorization": false,
+  "etsyPrecreateAllowed": false,
+  "channelFlow": "PRINTIFY_TO_ETSY"
+}
