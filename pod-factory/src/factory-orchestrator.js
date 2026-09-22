@@ -14,7 +14,7 @@ export function runFactoryDiscovery({signals=[],productEvidence=[],conceptSignal
 }
 
 export function runFactoryEconomics(discovery=[]){
- return discovery.map(c=>{const winners=c.winners.map(w=>({...w,products:rankEconomicProducts(w.products)}));const viable=winners.some(w=>w.products.length);return {...c,winners,status:viable?"READY_FOR_ARTWORK":"REJECT_ECONOMICS"}})
+ return discovery.map(c=>{const winners=c.winners.map(w=>({...w,products:rankEconomicProducts(w.products)}));const complete=winners.some(w=>w.products.some(p=>p.economics?.approved===true));return {...c,winners,status:complete?"READY_FOR_ARTWORK":"PRICING_INCOMPLETE"}})
 }
 export function factoryV1({signals=[],productEvidence=[],conceptSignalFn=()=>({}),maxOpportunities=5}={}){
  return runFactoryEconomics(runFactoryDiscovery({signals,productEvidence,conceptSignalFn,maxOpportunities}));
