@@ -11,6 +11,27 @@ Deno.serve(async (req) => {
     const present=Object.fromEntries(required.map(k=>[k,Boolean(Deno.env.get(k))]));
     return json({ok:Object.values(present).every(Boolean),service:"kenvori-pod-factory",env:present});
   }
+  if (url.pathname === "/printify/create-candidate-0003-draft" && url.searchParams.get("execute") === "candidate-0003-draft") {
+    try {
+      const token=Deno.env.get("PRINTIFY_API_TOKEN");
+      const h={Authorization:`Bearer ${token}`,"Content-Type":"application/json;charset=utf-8","User-Agent":"Kenvori-POD-Factory"};
+      const assetUrl="https://a62856d4-05af-4f1b-82d6-b6b6d2d1e5d8.sandbox.floot.app/_cdn/static/e2e1c51d-16fa-4306-9a8b-3377877b83ec-kenvori-candidate-0003-wrap-source.png";
+      const ur=await fetch("https://api.printify.com/v1/uploads/images.json",{method:"POST",headers:h,body:JSON.stringify({file_name:"kenvori-candidate-0003-wrap-source.png",url:assetUrl})});
+      const upload=await ur.json().catch(()=>null);
+      if(!ur.ok) return json({ok:false,stage:"upload",status:ur.status,error:upload,publishAllowed:false,ordersTouched:false},ur.status);
+      const product={
+        title:"Kenvori Candidate 0003 — Whimsical Maximalist Mug",
+        description:"Factory draft for QA. Not published.",
+        blueprint_id:68,print_provider_id:1,
+        variants:[{id:33719,price:2499,is_enabled:true}],
+        print_areas:[{variant_ids:[33719],placeholders:[{position:"front",images:[{id:upload.id,x:0.5,y:0.5,scale:1,angle:0}]}]}]
+      };
+      const cr=await fetch("https://api.printify.com/v1/shops/28992579/products.json",{method:"POST",headers:h,body:JSON.stringify(product)});
+      const created=await cr.json().catch(()=>null);
+      if(!cr.ok) return json({ok:false,stage:"create-draft",status:cr.status,error:created,uploadId:upload.id,publishAllowed:false,ordersTouched:false},cr.status);
+      return json({ok:true,candidateKey:"candidate-0003",uploadId:upload.id,productId:created.id,blueprintId:created.blueprint_id,providerId:created.print_provider_id,enabledVariants:(created.variants||[]).filter(v=>v.is_enabled).length,visible:created.visible??null,external:created.external??null,imageCount:(created.images||[]).length,publishAllowed:false,ordersTouched:false});
+    } catch(e){return json({ok:false,error:String(e?.message||e),publishAllowed:false,ordersTouched:false},500)}
+  }
   if (url.pathname === "/qa/candidate-0003-geometry") {
     try {
       const token=Deno.env.get("PRINTIFY_API_TOKEN");
