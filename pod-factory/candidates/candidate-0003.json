@@ -27,7 +27,7 @@
     ],
     "goal": "distinctive original Kenvori artwork with strong thumbnail readability and wraparound mug continuity"
   },
-  "nextGate": "READY_FOR_PUBLICATION_AUTHORIZATION",
+  "nextGate": "FINAL_20_IMAGE_ASSET_PRODUCTION_AND_QA",
   "publishAuthorization": false,
   "etsyPrecreateAllowed": false,
   "channelFlow": "PRINTIFY_TO_ETSY",
@@ -206,5 +206,26 @@
       "coworker gift"
     ],
     "description": "A cheerful daily reminder for slow mornings, busy desks and everything in between. This original Kenvori 11 oz ceramic mug features the uplifting phrase “Good Things Take Time” surrounded by colorful folk-inspired flowers, a smiling sun and a relaxed little cat.\\n\\nDesigned as an everyday encouragement mug and an easy-to-give gift for a friend, coworker, sister or anyone who could use a brighter moment. The wraparound artwork keeps the mug colorful from more than one angle while the main message stays clear and readable from the front.\\n\\nDETAILS\\n• 11 oz white ceramic mug\\n• Full-color wraparound design\\n• Original Kenvori artwork\\n• Made to order by our production partner\\n• Suitable for coffee, tea and everyday hot drinks\\n\\nGIFT IDEAS\\nBirthday • encouragement • self-care • coworker • friendship • Christmas • just because\\n\\nPlease note that colors can vary slightly between screens and the finished printed product."
+  },
+  "listingImages": {
+    "status": "SELECTED_20_IMAGE_DIRECTION",
+    "targetCount": 20,
+    "selectedSet": "SET_A_REVISED_NO_PACKAGING",
+    "selectedGenId": "332b574c-5ad2-45d4-b4d3-57ae27975230",
+    "packagingClaimRemoved": true,
+    "rules": {
+      "fillAvailableEtsyImageSlots": true,
+      "productTruthSource": "PRINTIFY_ACTUAL_PRODUCT_AND_APPROVED_ARTWORK",
+      "generatedPackagingForbidden": true,
+      "unverifiedAccessoriesForbidden": true,
+      "lifestyleMayChangeEnvironmentOnly": true,
+      "productArtworkMustRemainExact": true
+    },
+    "qa": {
+      "visualDirectionApproved": true,
+      "packagingMisrepresentationRemoved": true,
+      "finalAssetExtractionRequired": true,
+      "exactProductConsistencyRequired": true
+    }
   }
 }
