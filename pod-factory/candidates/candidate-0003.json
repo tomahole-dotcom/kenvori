@@ -3,229 +3,27 @@
   "status": "RESEARCH_LOCKED",
   "market": "Etsy",
   "researchDate": "2026-09-22",
-  "opportunity": {
-    "theme": "whimsical colorful maximalism",
-    "evidence": [
-      "Etsy 2026 World of Whimsy: playful self-expression remains a documented marketplace trend",
-      "Etsy 2026 trend data: colorful accessories +3000%, maximalist prints tripled in prior fall/winter report",
-      "Live Etsy search 2026-09-22 shows active whimsical/maximalist mug competition across abstract, floral, folk-art, fruit and character motifs"
-    ]
-  },
-  "productDirection": {
-    "type": "mug",
-    "reason": "Different product surface from Candidate 0002 while preserving a validated playful/colorful demand signal; suitable for an original all-over graphic without personalization.",
-    "personalized": false
-  },
-  "creativeLock": {
-    "concept": "Original playful maximalist mug built around irregular hand-drawn micro-shapes and expressive color rhythm; cheerful, collectible and intentionally imperfect rather than generic clip-art.",
-    "avoid": [
-      "polka-dot repeat from Candidate 0002",
-      "copyrighted characters or brands",
-      "generic AI-style floral collage",
-      "copying competitor motifs or compositions",
-      "personalization"
-    ],
-    "goal": "distinctive original Kenvori artwork with strong thumbnail readability and wraparound mug continuity"
-  },
-  "nextGate": "FINAL_20_IMAGE_ASSET_PRODUCTION_AND_QA",
-  "publishAuthorization": false,
-  "etsyPrecreateAllowed": false,
-  "channelFlow": "PRINTIFY_TO_ETSY",
-  "commercialOpportunity": {
-    "status": "APPROVED",
-    "researchDate": "2026-09-22",
-    "evergreenDemand": true,
-    "currentTrend": {
-      "theme": "Play Haus / joyful maximalism",
-      "evidence": "Etsy Fall/Winter trend data identifies color-drenched, whimsical, dopamine-bright products and specifically colorful ceramics as an inventory opportunity.",
-      "signals": [
-        "colorful accessories +3000%",
-        "dopamine items +40%",
-        "maximalist prints tripled"
-      ]
-    },
-    "q4Timing": {
-      "activeWindow": true,
-      "reason": "Etsy's 2026 Festive Season guidance is already live in September; holiday shoppers are entering gift discovery and Etsy recommends sharpening keywords, photos, descriptions and delivery profiles now.",
-      "occasions": [
-        "Halloween",
-        "Thanksgiving/hostess gifting",
-        "Black Friday/Cyber Week",
-        "Christmas gifting",
-        "New Year/self-gifting"
-      ]
-    },
-    "giftIntents": [
-      "gift for her",
-      "coworker gift",
-      "friend gift",
-      "self-care gift",
-      "stocking/under-tree add-on"
-    ],
-    "strategy": "Keep Candidate 0003 evergreen; use Q4 gifting intent in listing and merchandising rather than making the artwork Christmas-only.",
-    "salesGoal": "Maximize qualified search visibility, thumbnail CTR and gift conversion without copying competitor artwork or text."
-  },
-  "listingIntelligence": {
-    "status": "APPROVED",
-    "evidenceCount": 30,
-    "tractionEvidence": [
-      {
-        "listingId": 1407115270,
-        "rating": 4.93,
-        "ratingCount": 10804
-      },
-      {
-        "listingId": 4399062342,
-        "rating": 4.87,
-        "ratingCount": 1275
-      },
-      {
-        "listingId": 4571118132,
-        "rating": 4.9,
-        "ratingCount": 209
-      },
-      {
-        "listingId": 4514955342,
-        "rating": 4.77,
-        "ratingCount": 118
-      }
-    ],
-    "observedIntents": [
-      "positive affirmation mug",
-      "motivational mug",
-      "floral mug",
-      "self care gift",
-      "gift for her",
-      "daily reminder",
-      "inspirational coffee mug"
-    ],
-    "copyCompetitorText": false,
-    "copyCompetitorArtwork": false
-  },
-  "productLock": {
-    "status": "LOCKED",
-    "blueprintId": 68,
-    "blueprint": "Mug 11oz",
-    "providerId": 1,
-    "provider": "SPOKE Custom Products",
-    "variantId": 33719,
-    "variant": "11oz",
-    "reason": "Uses proven Kenvori live mug configuration and preserves a clean white canvas for the locked colorful maximalist concept."
-  },
-  "economics": {
-    "status": "PRICE_SET",
-    "currency": "USD",
-    "productionCostCents": 644,
-    "shippingMarket": "US",
-    "shippingFirstItemCents": 669,
-    "costBasisCents": 1313,
-    "pricingRule": "ACTUAL_COST_PLUS_SHIPPING_TO_SALE_PRICE",
-    "marginSelectionGate": false,
-    "referenceExistingKenvoriPriceCents": 2499,
-    "salePriceCents": 2744,
-    "targetPct": 40,
-    "etsyRatePct": 10.5,
-    "etsyFixedCents": 25,
-    "listingFeeCents": 20,
-    "calculation": "ceil((644+669+25+20)/(1-0.40-0.105)) = 2744"
-  },
-  "artwork": {
-    "status": "QA_APPROVED_SOURCE",
-    "genId": "3689b4bd-bc9a-45c1-a2b2-e78578c5a15e",
-    "sourceFile": "a_wide_rectangular_colorful_flat_vector_illustr.png",
-    "qa": {
-      "flatArtworkOnly": true,
-      "noMockup": true,
-      "noPresentationBoard": true,
-      "wideWrapComposition": true,
-      "textLegible": true,
-      "visualContinuity": true,
-      "notes": "Approved as source artwork; must be fit to exact Printify blueprint 68 print-area geometry without stretching before upload."
-    }
-  },
-  "printifyDraft": {
-    "status": "CREATED",
-    "shopId": 28992579,
-    "productId": "6ab28f87d8d6ff7189080c88",
-    "uploadId": "6ab28f8528f2d703ae5d09cd",
-    "blueprintId": 68,
-    "providerId": 1,
-    "variantId": 33719,
-    "enabledVariants": 1,
-    "imageCount": 6,
-    "external": null,
-    "published": false,
-    "ordersTouched": false
-  },
-  "printifyMockupQA": {
-    "status": "QA_APPROVED",
-    "source": "PRINTIFY_RENDERED_MOCKUP",
-    "productId": "6ab28f87d8d6ff7189080c88",
-    "checks": {
-      "frontComposition": true,
-      "headlineLegible": true,
-      "majorArtworkCropping": false,
-      "verticalPlacement": true,
-      "whiteMarginAcceptable": true,
-      "wrapContinuesAtSides": true
-    },
-    "notes": "Rendered Printify mug mockup shows centered Good Things Take Time composition, sun/cat/floral elements intact, strong front readability and no problematic crop. Continue to listing intelligence and metadata; publication remains locked."
-  },
-  "mockupQa": {
-    "status": "APPROVED",
-    "source": "PRINTIFY_ACTUAL_FRONT_MOCKUP",
-    "asset": "candidate-0003-printify-front-mockup.jpg",
-    "dimensions": "1200x1200",
-    "checks": {
-      "mainMessageReadable": true,
-      "centralComposition": true,
-      "verticalPlacementGood": true,
-      "majorCropping": false,
-      "artworkFollowsMugCurvature": true,
-      "thumbnailReadability": true
-    },
-    "notes": "Actual Printify mockup visually inspected. Main message is centered and highly legible; sun, floral framing and cat render cleanly. Side wrap artwork naturally continues beyond the front camera view. No blocking placement defect found."
-  },
-  "etsyPackage": {
-    "status": "SALE_READY_METADATA",
-    "title": "Good Things Take Time Mug, Positive Affirmation Mug, Floral Self Care Gift, Inspirational Coffee Cup, Gift for Her",
-    "priceCents": 2744,
-    "tags": [
-      "affirmation mug",
-      "positive quote mug",
-      "floral mug",
-      "self care gift",
-      "gift for her",
-      "motivational mug",
-      "inspirational mug",
-      "daily reminder mug",
-      "cute coffee mug",
-      "colorful mug",
-      "wellness gift",
-      "friend gift",
-      "coworker gift"
-    ],
-    "description": "A cheerful daily reminder for slow mornings, busy desks and everything in between. This original Kenvori 11 oz ceramic mug features the uplifting phrase “Good Things Take Time” surrounded by colorful folk-inspired flowers, a smiling sun and a relaxed little cat.\\n\\nDesigned as an everyday encouragement mug and an easy-to-give gift for a friend, coworker, sister or anyone who could use a brighter moment. The wraparound artwork keeps the mug colorful from more than one angle while the main message stays clear and readable from the front.\\n\\nDETAILS\\n• 11 oz white ceramic mug\\n• Full-color wraparound design\\n• Original Kenvori artwork\\n• Made to order by our production partner\\n• Suitable for coffee, tea and everyday hot drinks\\n\\nGIFT IDEAS\\nBirthday • encouragement • self-care • coworker • friendship • Christmas • just because\\n\\nPlease note that colors can vary slightly between screens and the finished printed product."
-  },
-  "listingImages": {
-    "status": "SELECTED_20_IMAGE_DIRECTION",
-    "targetCount": 20,
-    "selectedSet": "SET_A_REVISED_NO_PACKAGING",
-    "selectedGenId": "332b574c-5ad2-45d4-b4d3-57ae27975230",
-    "packagingClaimRemoved": true,
-    "rules": {
-      "fillAvailableEtsyImageSlots": true,
-      "productTruthSource": "PRINTIFY_ACTUAL_PRODUCT_AND_APPROVED_ARTWORK",
-      "generatedPackagingForbidden": true,
-      "unverifiedAccessoriesForbidden": true,
-      "lifestyleMayChangeEnvironmentOnly": true,
-      "productArtworkMustRemainExact": true
-    },
-    "qa": {
-      "visualDirectionApproved": true,
-      "packagingMisrepresentationRemoved": true,
-      "finalAssetExtractionRequired": true,
-      "exactProductConsistencyRequired": true
-    }
+  "opportunity": {"theme":"whimsical colorful maximalism","evidence":["Etsy 2026 World of Whimsy: playful self-expression remains a documented marketplace trend","Etsy 2026 trend data: colorful accessories +3000%, maximalist prints tripled in prior fall/winter report","Live Etsy search 2026-09-22 shows active whimsical/maximalist mug competition across abstract, floral, folk-art, fruit and character motifs"]},
+  "productDirection":{"type":"mug","reason":"Different product surface from Candidate 0002 while preserving a validated playful/colorful demand signal; suitable for an original all-over graphic without personalization.","personalized":false},
+  "creativeLock":{"concept":"Original playful maximalist mug built around irregular hand-drawn micro-shapes and expressive color rhythm; cheerful, collectible and intentionally imperfect rather than generic clip-art.","avoid":["polka-dot repeat from Candidate 0002","copyrighted characters or brands","generic AI-style floral collage","copying competitor motifs or compositions","personalization"],"goal":"distinctive original Kenvori artwork with strong thumbnail readability and wraparound mug continuity"},
+  "nextGate":"COMPOSITE_EXACT_PRODUCT_INTO_20_INDIVIDUAL_SCENES",
+  "publishAuthorization":false,
+  "etsyPrecreateAllowed":false,
+  "channelFlow":"PRINTIFY_TO_ETSY",
+  "productLock":{"status":"LOCKED","blueprintId":68,"blueprint":"Mug 11oz","providerId":1,"provider":"SPOKE Custom Products","variantId":33719,"variant":"11oz"},
+  "economics":{"status":"PRICE_SET","currency":"USD","productionCostCents":644,"shippingMarket":"US","shippingFirstItemCents":669,"costBasisCents":1313,"salePriceCents":2744,"targetPct":40,"etsyRatePct":10.5,"etsyFixedCents":25,"listingFeeCents":20},
+  "artwork":{"status":"QA_APPROVED_SOURCE","genId":"3689b4bd-bc9a-45c1-a2b2-e78578c5a15e","sourceFile":"a_wide_rectangular_colorful_flat_vector_illustr.png"},
+  "printifyDraft":{"status":"CREATED","shopId":28992579,"productId":"6ab28f87d8d6ff7189080c88","uploadId":"6ab28f8528f2d703ae5d09cd","blueprintId":68,"providerId":1,"variantId":33719,"enabledVariants":1,"imageCount":6,"published":false,"ordersTouched":false},
+  "mockupQa":{"status":"APPROVED","source":"PRINTIFY_ACTUAL_FRONT_MOCKUP","asset":"candidate-0003-printify-front-mockup.jpg","dimensions":"1200x1200"},
+  "etsyPackage":{"status":"SALE_READY_METADATA","title":"Good Things Take Time Mug, Positive Affirmation Mug, Floral Self Care Gift, Inspirational Coffee Cup, Gift for Her","priceCents":2744,"tags":["affirmation mug","positive quote mug","floral mug","self care gift","gift for her","motivational mug","inspirational mug","daily reminder mug","cute coffee mug","colorful mug","wellness gift","friend gift","coworker gift"]},
+  "listingImages":{
+    "status":"EXACT_PRODUCT_COMPOSITING_REQUIRED",
+    "targetCount":20,
+    "selectedSet":"SET_A_REVISED_NO_PACKAGING",
+    "directionAsset":"/_cdn/static/6294d244-45ea-4378-80c0-14ab550018d7-candidate-0003-final-gallery-direction.png",
+    "productTruthAsset":"candidate-0003-printify-front-mockup.jpg",
+    "packagingClaimRemoved":true,
+    "rules":{"generatedPackagingForbidden":true,"unverifiedAccessoriesForbidden":true,"productArtworkMustRemainExact":true,"doNotRegenerateProduct":true,"sceneGenerationAllowed":true,"compositeActualPrintifyProductIntoScene":true},
+    "qa":{"visualDirectionApproved":true,"packagingMisrepresentationRemoved":true,"previousAIGalleryRejectedAsFinal":true,"reason":"AI gallery altered typography/cat/artwork and therefore cannot be used as product truth.","exactProductConsistencyRequired":true}
   }
 }
